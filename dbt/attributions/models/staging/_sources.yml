@@ -1,0 +1,55 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Raw data landing zone - CSV loads from Python pipeline"
+    database: ATTRIBUTION_DEV
+    schema: raw
+    
+    tables:
+      - name: ga4_events
+        description: "GA4 web analytics events (synthetic or from BigQuery API)"
+        columns:
+          - name: user_pseudo_id
+            description: "Unique user identifier"
+            tests:
+              - not_null
+          - name: event_timestamp
+            description: "Event timestamp"
+          - name: event_name
+            description: "Event type (session_start, page_view, purchase, etc.)"
+          - name: revenue
+            description: "Revenue for purchase events"
+          - name: transaction_id
+            description: "Transaction ID for purchase events"
+      
+      - name: campaigns
+        description: "Advertising campaign configuration"
+        columns:
+          - name: campaign_id
+            description: "Unique campaign identifier"
+            tests:
+              - unique
+              - not_null
+          - name: campaign_type
+            description: "prospecting or retargeting"
+          - name: creative_format
+            description: "display, video, or native"
+      
+      - name: impressions
+        description: "Programmatic ad impression events"
+        columns:
+          - name: impression_id
+            description: "Unique impression identifier"
+            tests:
+              - unique
+              - not_null
+          - name: user_pseudo_id
+            description: "User who saw the impression"
+          - name: impression_timestamp
+            description: "When impression occurred"
+          - name: is_viewable
+            description: "Whether impression was viewable (MRC standard)"
+          - name: campaign_id
+            description: "Associated campaign"
+

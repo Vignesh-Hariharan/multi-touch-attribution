@@ -1,0 +1,43 @@
+name: 'attributions'
+version: '1.0.0'
+config-version: 2
+
+# Project profile
+profile: 'attributions'
+
+# Directories
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+  - "logs"
+
+# Model configurations
+models:
+  attributions:
+    # Staging models - views for performance
+    staging:
+      +materialized: view
+      
+    # Intermediate models - views
+    intermediate:
+      +materialized: view
+      
+    # Mart models - tables for query performance
+    marts:
+      +materialized: table
+
+# Project variables
+vars:
+  attribution_window_days: 30
+  session_timeout_minutes: 30
+
+# Documentation
+docs-paths: ["docs"]
+
