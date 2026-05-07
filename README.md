@@ -87,8 +87,8 @@ GA4 Events (Synthetic)          Programmatic Ads (Simulated)
 
 ```bash
 # Clone the repository
-git clone https://github.com/Vignesh-Hariharan/attribution-analytics.git
-cd attribution-analytics
+git clone https://github.com/Vignesh-Hariharan/multi-touch-attribution.git
+cd multi-touch-attribution
 
 # Install dependencies
 python -m venv venv
