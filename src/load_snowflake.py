@@ -134,8 +134,8 @@ class SnowflakeLoader:
         if table_name == "campaigns":
             placeholders = "(%s, %s, %s, %s, %s, %s, %s, %s)"
             insert_sql = f"INSERT INTO {table_name} VALUES {placeholders}"
-            data = [(str(row['campaign_id']), str(row['campaign_name']), str(row['advertiser']),
-                    str(row['campaign_type']), str(row['creative_format']), 
+            data = [(str(row['campaign_id']), str(row['advertiser']),
+                    str(row['campaign_type']), str(row['campaign_name']), str(row['creative_format']),
                     str(row['start_date']), str(row['end_date']), str(row['daily_budget']))
                    for _, row in df.iterrows()]
         
