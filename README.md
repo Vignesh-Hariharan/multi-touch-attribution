@@ -247,7 +247,7 @@ ORDER BY position_based_revenue DESC;
 
 **Key Insight:** Last-click attribution systematically overvalues organic/direct channels while undervaluing paid prospecting campaigns that initiated awareness. Among the 37 conversions with prospecting touchpoints, prospecting display receives nearly **3x more credit** under position-based models, revealing how traditional attribution masks the true value of top-of-funnel investments.
 
-**Business Impact:** Even at 17% paid penetration, $3,056 in prospecting value is hidden by last-click attribution. For companies with 40-60% paid media penetration, this misallocation could represent $20-40K in budget optimization opportunities per $100K spend.
+**Business Impact:** Even at 17% paid penetration, $3,056 in prospecting value is hidden by last-click attribution. At higher paid media penetration the misallocation scales with it.
 
 For detailed validation queries, see `dbt/attributions/analyses/validate_finding.sql` and `channel_comparison.sql`.
 
