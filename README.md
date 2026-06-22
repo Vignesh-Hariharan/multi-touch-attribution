@@ -12,7 +12,7 @@ This project quantifies the true contribution of marketing touchpoints across th
   </a>
 </p>
 
-**[View Dashboard on Tableau Public](https://public.tableau.com/app/profile/vignesh.hariharan4351/viz/Book1_17622139583390/Multi-TouchAttributionAnalysisPosition-BasedvsLast-Click)**
+**[View Dashboard on Tableau Public](https://public.tableau.com/views/Multi-TouchAttributionAnalysis/Multi-TouchAttributionAnalysis?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)**
 
 ## Problem Statement
 
