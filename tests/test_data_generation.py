@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 import pandas as pd
 import pytest
 from config import get_config
-from extract_ga4 import GA4EventGenerator
+from generate_ga4 import GA4EventGenerator
 from generate_campaigns import CampaignGenerator
 from generate_impressions import ImpressionGenerator
 

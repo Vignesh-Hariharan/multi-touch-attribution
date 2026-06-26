@@ -1,8 +1,8 @@
 """
-GA4 Event Data Extractor/Generator
+GA4 Synthetic Event Generator
 
-Generates synthetic GA4 e-commerce event data when real GA4 API access is unavailable.
-Creates realistic user journeys with sessions, page views, and purchase events.
+Generates synthetic GA4 e-commerce event data with realistic user journey patterns:
+sessions, page views, channel attribution, and purchase events.
 """
 
 import argparse

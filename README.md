@@ -100,7 +100,7 @@ cp .env.sample .env
 # Edit .env with your Snowflake credentials
 
 # Generate data
-python src/extract_ga4.py
+python src/generate_ga4.py
 python src/generate_campaigns.py
 python src/generate_impressions.py
 
@@ -120,7 +120,7 @@ dbt test --profiles-dir .
 attribution-analytics/
 ├── src/
 │   ├── config.py              # Configuration management
-│   ├── extract_ga4.py         # Generate GA4 events
+│   ├── generate_ga4.py        # Generate synthetic GA4 events
 │   ├── generate_campaigns.py  # Generate campaign data
 │   ├── generate_impressions.py # Generate ad impressions
 │   └── load_snowflake.py      # Load data to Snowflake
