@@ -134,29 +134,29 @@ class SnowflakeLoader:
         if table_name == "campaigns":
             placeholders = "(%s, %s, %s, %s, %s, %s, %s, %s)"
             insert_sql = f"INSERT INTO {table_name} VALUES {placeholders}"
-            data = [(str(row['campaign_id']), str(row['advertiser']),
-                    str(row['campaign_type']), str(row['campaign_name']), str(row['creative_format']),
-                    str(row['start_date']), str(row['end_date']), str(row['daily_budget']))
-                   for _, row in df.iterrows()]
+            data = [(str(row.campaign_id), str(row.advertiser),
+                    str(row.campaign_type), str(row.campaign_name), str(row.creative_format),
+                    str(row.start_date), str(row.end_date), str(row.daily_budget))
+                   for row in df.itertuples(index=False)]
         
         elif table_name == "ga4_events":
             placeholders = "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             insert_sql = f"INSERT INTO {table_name} VALUES {placeholders}"
-            data = [(str(row['event_timestamp']), str(row['event_date']), str(row['event_name']),
-                    str(row['user_pseudo_id']), str(row['session_id']), str(row['source']),
-                    str(row['medium']), str(row['campaign']), str(row['page_location']),
-                    str(row['device_category']), str(row['country']), str(row['revenue']),
-                    str(row['transaction_id']) if pd.notna(row['transaction_id']) else '')
-                   for _, row in df.iterrows()]
+            data = [(str(row.event_timestamp), str(row.event_date), str(row.event_name),
+                    str(row.user_pseudo_id), str(row.session_id), str(row.source),
+                    str(row.medium), str(row.campaign), str(row.page_location),
+                    str(row.device_category), str(row.country), str(row.revenue),
+                    str(row.transaction_id) if pd.notna(row.transaction_id) else '')
+                   for row in df.itertuples(index=False)]
         
         elif table_name == "impressions":
             placeholders = "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             insert_sql = f"INSERT INTO {table_name} VALUES {placeholders}"
-            data = [(str(row['impression_id']), str(row['impression_timestamp']), str(row['user_pseudo_id']),
-                    str(row['campaign_id']), str(row['campaign_name']), str(row['campaign_type']),
-                    str(row['creative_format']), str(row['publisher']), str(row['is_viewable']),
-                    str(row['has_click']), str(row['device_category']))
-                   for _, row in df.iterrows()]
+            data = [(str(row.impression_id), str(row.impression_timestamp), str(row.user_pseudo_id),
+                    str(row.campaign_id), str(row.campaign_name), str(row.campaign_type),
+                    str(row.creative_format), str(row.publisher), str(row.is_viewable),
+                    str(row.has_click), str(row.device_category))
+                   for row in df.itertuples(index=False)]
         else:
             raise ValueError(f"Unknown table: {table_name}")
         
