@@ -27,7 +27,7 @@ class Config(BaseSettings):
     snowflake_account: str = Field(..., description="Snowflake account identifier")
     snowflake_user: str = Field(..., description="Snowflake username")
     snowflake_password: str = Field(..., description="Snowflake password")
-    snowflake_role: str = Field(default="ACCOUNTADMIN")
+    snowflake_role: str = Field(default="SYSADMIN")
     snowflake_warehouse: str = Field(default="COMPUTE_WH")
     snowflake_database: str = Field(default="ATTRIBUTION_DEV")
 

@@ -6,7 +6,7 @@ attributions:
       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
       user: "{{ env_var('SNOWFLAKE_USER') }}"
       password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
-      role: "{{ env_var('SNOWFLAKE_ROLE', 'ACCOUNTADMIN') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'SYSADMIN') }}"
       database: "{{ env_var('SNOWFLAKE_DATABASE', 'ATTRIBUTION_DEV') }}"
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'COMPUTE_WH') }}"
       schema: analytics

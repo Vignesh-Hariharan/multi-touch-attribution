@@ -1,5 +1,11 @@
 # Multi-Touch Attribution Analytics
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](https://www.python.org/)
+[![Snowflake](https://img.shields.io/badge/Snowflake-29B5E8.svg)](https://www.snowflake.com/)
+[![dbt](https://img.shields.io/badge/dbt-FF694B.svg)](https://www.getdbt.com/)
+[![Tableau Public](https://img.shields.io/badge/Tableau-Live%20Dashboard-E97627.svg)](https://public.tableau.com/views/Multi-TouchAttributionAnalysis/Multi-TouchAttributionAnalysis?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
+
 End-to-end attribution modeling pipeline built with Python, Snowflake, and dbt. Uses synthetic data to demonstrate dbt layering (staging → intermediate → marts), custom SQL data quality tests, and four attribution model implementations.
 
 This project quantifies the true contribution of marketing touchpoints across the customer journey using four attribution models, revealing systematic biases in traditional last-click attribution.
@@ -117,7 +123,7 @@ dbt test --profiles-dir .
 ## Project Structure
 
 ```
-attribution-analytics/
+multi-touch-attribution/
 ├── src/
 │   ├── config.py              # Configuration management
 │   ├── generate_ga4.py        # Generate synthetic GA4 events

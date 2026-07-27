@@ -53,7 +53,7 @@
 - No duplicate transaction IDs
 
 ### Snowflake Environment
-- ACCOUNTADMIN role has full permissions
+- SYSADMIN role owns the database objects and has the grants issued in sql/snowflake_ddl.sql
 - COMPUTE_WH warehouse is available and running
 - Database can be dropped and recreated cleanly
 - X-Small warehouse is sufficient for this data volume
