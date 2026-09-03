@@ -210,18 +210,14 @@ def main():
     parser.add_argument("--output", type=str, help="Output CSV path")
     args = parser.parse_args()
 
-    # Load config
     config = get_config()
-    
-    # Load dependencies
+
     events_df = pd.read_csv(config.data_dir / "ga4_events.csv", parse_dates=["event_timestamp"])
     campaigns_df = pd.read_csv(config.data_dir / "campaigns.csv")
-    
-    # Generate impressions
+
     generator = ImpressionGenerator(config)
     impressions_df = generator.generate(events_df, campaigns_df)
-    
-    # Save to CSV
+
     output_path = args.output or config.data_dir / "impressions.csv"
     impressions_df.to_csv(output_path, index=False)
     print(f"\n Saved {len(impressions_df):,} impressions to {output_path}")

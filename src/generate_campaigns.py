@@ -102,19 +102,15 @@ def main():
     parser.add_argument("--output", type=str, help="Output CSV path")
     args = parser.parse_args()
 
-    # Load config
     config = get_config()
-    
-    # Generate campaigns
+
     generator = CampaignGenerator(config)
     campaigns_df = generator.generate()
-    
-    # Save to CSV
+
     output_path = args.output or config.data_dir / "campaigns.csv"
     campaigns_df.to_csv(output_path, index=False)
     print(f"\n Saved {len(campaigns_df)} campaigns to {output_path}")
-    
-    # Display all campaigns
+
     print("\n Campaign Summary:")
     print(campaigns_df.to_string(index=False))
 

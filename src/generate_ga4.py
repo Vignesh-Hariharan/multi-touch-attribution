@@ -171,14 +171,11 @@ def main():
     parser.add_argument("--output", type=str, help="Output CSV path")
     args = parser.parse_args()
 
-    # Load config
     config = get_config()
-    
-    # Generate events
+
     generator = GA4EventGenerator(config)
     events_df = generator.generate()
-    
-    # Save to CSV
+
     output_path = args.output or config.data_dir / "ga4_events.csv"
     events_df.to_csv(output_path, index=False)
     print(f"\n Saved {len(events_df):,} events to {output_path}")

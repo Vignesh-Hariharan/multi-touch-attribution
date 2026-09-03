@@ -40,18 +40,15 @@ class SnowflakeLoader:
         print("\n  Executing DDL...")
         
         cursor = self.conn.cursor()
-        
-        # Create database
+
         cursor.execute("CREATE DATABASE IF NOT EXISTS ATTRIBUTION_DEV")
         print("   Database created")
-        
-        # Use database and create schemas
+
         cursor.execute("USE DATABASE ATTRIBUTION_DEV")
         cursor.execute("CREATE SCHEMA IF NOT EXISTS raw")
         cursor.execute("CREATE SCHEMA IF NOT EXISTS analytics")
         print("   Schemas created")
-        
-        # Create tables
+
         cursor.execute("""
             CREATE OR REPLACE TABLE raw.campaigns (
                 campaign_id VARCHAR(30),
@@ -217,31 +214,23 @@ def main():
     parser.add_argument("--skip-ddl", action="store_true", help="Skip DDL execution")
     args = parser.parse_args()
 
-    # Load config
     config = get_config()
-    
-    # Initialize loader
     loader = SnowflakeLoader(config)
-    
+
     try:
-        # Connect
         loader.connect()
-        
-        # Execute DDL (unless skipped)
+
         if not args.skip_ddl:
             loader.execute_ddl()
         else:
             print("\n Skipping DDL execution")
-        
-        # Load tables
+
         loader.load_table("campaigns.csv", "campaigns")
         loader.load_table("ga4_events.csv", "ga4_events")
         loader.load_table("impressions.csv", "impressions")
-        
-        # Validate
+
         counts = loader.validate()
-        
-        # Summary
+
         print("\n" + "="*60)
         print(" LOAD COMPLETE!")
         print("="*60)
