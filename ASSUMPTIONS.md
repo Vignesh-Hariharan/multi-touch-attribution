@@ -68,7 +68,7 @@
 
 ### Marketing Strategy
 - Prospecting campaigns focus on awareness and new customer acquisition
-- Analysis examines how last-click attribution undervalues early-stage paid media
+- Analysis compares last-click vs position-based credit on early-stage paid media
 - Multi-touch journeys occur in 47% of conversions (average 1.9 touchpoints overall)
 - Display ads drive awareness even if they don't directly lead to clicks
 
@@ -89,7 +89,9 @@ This project uses **synthetic data** generated to realistically simulate GA4 web
 - Marketing data from employers is confidential and subject to non-disclosure agreements
 - Public portfolio projects require reproducible, shareable datasets that don't expose business-sensitive information
 
-The synthetic data generation follows industry-standard patterns observed in real e-commerce and programmatic advertising, ensuring the attribution methodology and findings remain valid and applicable to production environments.
+The generator follows common e-commerce and programmatic patterns so the pipeline
+is runnable without anyone's production data. The gap sizes are from this seed,
+not from live campaigns.
 
 ## Research Sources
 
@@ -127,10 +129,10 @@ Parameters use midpoint values when industry sources provide ranges (e.g., 0.05-
 ## Why These Assumptions Matter
 
 These assumptions enable:
-- **Reproducibility**: Anyone can run the pipeline and validate the findings independently
-- **Clear Signal**: Controlled data reveals attribution model differences without confounding factors
-- **Realistic Patterns**: Campaign timing and user behavior mirror actual programmatic advertising constraints
-- **Methodology Focus**: Demonstrates attribution engineering skills without business-sensitive data
+- **Reproducibility**: Anyone can run the pipeline and get the same tables
+- **Clear Signal**: Controlled data shows where models disagree, without extra noise
+- **Realistic Patterns**: Campaign timing and user behavior sit in published industry ranges
+- **Shareable data**: No client GA4 extract, no NDA
 
 For production deployment, this framework would be adapted to:
 - Connect to actual GA4 and ad platform APIs (Google Analytics Data API, DV360 API)

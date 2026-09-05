@@ -8,9 +8,9 @@
 [![Tableau Public](https://img.shields.io/badge/Tableau-Live%20Dashboard-E97627.svg)](https://public.tableau.com/views/Multi-TouchAttributionAnalysis/Multi-TouchAttributionAnalysis?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
 
 An attribution pipeline that compares four models (first-touch, last-touch, linear,
-position-based) on a synthetic marketing dataset, built with Python, Snowflake and dbt.
-It runs on GA4-schema event data plus programmatic ad impressions, layers the transforms
-in dbt (staging → intermediate → marts), and checks the output with custom SQL tests.
+position-based) on a synthetic marketing dataset. Python loads GA4-schema events and
+ad impressions into Snowflake; dbt builds staging → intermediate → marts and tests
+that attributed revenue sums back to actuals.
 
 ## Dashboard
 
@@ -22,19 +22,23 @@ in dbt (staging → intermediate → marts), and checks the output with custom S
 
 [View the dashboard on Tableau Public](https://public.tableau.com/views/Multi-TouchAttributionAnalysis/Multi-TouchAttributionAnalysis?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
 
+The live viz compares last-click vs position-based — the pair with a single gap %.
+First-touch and linear are in the mart.
+
 ## The question
 
-Last-click attribution gives 100% of the credit to the final touchpoint before a
-conversion. That default undervalues the campaigns that started the journey — prospecting
-and awareness — which biases budget toward channels that only show up near the end. The
-pipeline quantifies that bias by scoring the same conversions under four models and
-comparing the credit each channel receives.
+Last-click gives 100% of conversion credit to the final touchpoint. That's the
+platform default, so channels that show up early get less. The pipeline scores
+the same conversions four ways so you can see where the models split, and so all
+four still add up to the same revenue.
 
-## What the data shows
+## What this run produces
 
-Of 220 conversions, 37 (17%) included a paid prospecting touchpoint before converting.
-For those channels, position-based attribution assigns materially more credit than
-last-click:
+Synthetic data, seed 42. That way dbt tests have a known answer and CI doesn't
+need a GA4 login. On real traffic the gaps move with journey length and paid mix.
+
+Of 220 conversions in this run, 37 (17%) had a paid prospecting touch before
+converting. Position-based vs last-click:
 
 | Channel | Last-touch | Position-based | Gap |
 |---------|-----------:|---------------:|----:|
@@ -47,14 +51,9 @@ last-click:
 | google_organic | $16,273 | $14,129 | -13% |
 | referral | $5,213 | $4,338 | -17% |
 
-The pattern is consistent: early-stage paid channels are undervalued by last-click (up to
-+190%), late-stage organic and direct are overvalued (-2% to -17%), and email sits in the
-middle. Even at this conservative 17% paid penetration, about $3,056 of prospecting credit
-moves between channels depending on the model. The gap scales with paid penetration —
-higher paid mix, larger reallocation.
-
-Results are reproducible: data generation is seeded (`seed=42`), so the numbers above match
-a clean run. Validation queries are in `dbt/attributions/analyses/`.
+Display's +190% comes from this generator (17% paid mix, 1.9 average touches,
+40/40/20). Don't read it as a live-campaign number. Queries that rebuild the
+table are in `dbt/attributions/analyses/`.
 
 ## Architecture
 
@@ -151,8 +150,8 @@ The synthetic dataset is built to resemble a programmatic marketing funnel:
 - Prospecting ads fire 1–14 days before the first session (cold-audience timing)
 - 60% of web users are also ad-targeted, in the range of real programmatic match rates
 
-Paid penetration here (17% of conversions) is deliberately conservative; real campaigns run
-15–60% depending on budget. The direction of the attribution gap holds across that range.
+Paid mix here is 17% of conversions, the low end of the 15–60% range campaigns
+actually run. Turn that up and the gaps get bigger — that's the generator.
 
 ## Validation
 

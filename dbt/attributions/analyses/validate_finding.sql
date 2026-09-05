@@ -1,11 +1,8 @@
 /*
-    Validation Analysis: Prospecting Display Undervaluation
-    
-    This query DISCOVERS the actual percentage by which last-click
-    attribution undervalues prospecting display ads.
-    
-    Expected result: 150-200% increase from last-touch to position-based
-    (exact number emerges from realistic data simulation)
+    Display gap: position-based vs last-click on prospecting_display.
+
+    On seed=42 this lands around +190%. That range is a property of the
+    generator (paid mix, journey length, 40/40/20), not a market measurement.
 */
 
 WITH last_touch AS (
@@ -43,18 +40,6 @@ SELECT
     ROUND(last_touch_revenue, 2) AS last_touch_revenue,
     ROUND(position_based_revenue, 2) AS position_based_revenue,
     ROUND(absolute_increase, 2) AS absolute_increase,
-    percent_increase AS undervaluation_pct
+        percent_increase AS gap_pct
 FROM comparison
 ORDER BY percent_increase DESC;
-
-/*
-    INTERPRETATION:
-    
-    If undervaluation_pct = 175%:
-    "Last-click attribution undervalues prospecting display by 175%"
-    
-    If undervaluation_pct = 220%:
-    "Last-click attribution undervalues prospecting display by 220%"
-    
-    This is your HEADLINE FINDING for the portfolio.
-*/
