@@ -22,7 +22,7 @@ that attributed revenue sums back to actuals.
 
 [View the dashboard on Tableau Public](https://public.tableau.com/views/Multi-TouchAttributionAnalysis/Multi-TouchAttributionAnalysis?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
 
-The live viz compares last-click vs position-based — the pair with a single gap %.
+The live viz compares last-click vs position-based, the pair with a single gap %.
 First-touch and linear are in the mart.
 
 ## The question
@@ -59,7 +59,7 @@ table are in `dbt/attributions/analyses/`.
 
 ```
 GA4 Events (synthetic)          Programmatic Ads (simulated)
-  ~28K events, 220 conversions    ~14K impressions, 12 campaigns
+  seed=42, 220 conversions        12 campaigns
          |                                    |
          +-------------> Python <-------------+
                            |
@@ -133,10 +133,10 @@ multi-touch-attribution/
 
 All four are implemented in [`fct_attribution.sql`](dbt/attributions/models/marts/fct_attribution.sql).
 
-- **First touch** — 100% to the first touchpoint. `WHEN touchpoint_position = 1 THEN revenue ELSE 0`
-- **Last touch** — 100% to the last touchpoint; the platform default. `WHEN touchpoint_position = total_touchpoints THEN revenue ELSE 0`
-- **Linear** — equal credit across touchpoints. `revenue / total_touchpoints`
-- **Position-based (U-shaped)** — 40% first, 40% last, 20% split across the middle, with edge-case handling for single- and two-touch journeys.
+- **First touch:** 100% to the first touchpoint. `WHEN touchpoint_position = 1 THEN revenue ELSE 0`
+- **Last touch:** 100% to the last touchpoint; the platform default. `WHEN touchpoint_position = total_touchpoints THEN revenue ELSE 0`
+- **Linear:** equal credit across touchpoints. `revenue / total_touchpoints`
+- **Position-based (U-shaped):** 40% first, 40% last, 20% split across the middle, with edge-case handling for single- and two-touch journeys.
 
 Model diagrams adapted from [Roketto's visual guide to attribution models](https://www.helloroketto.com/articles/a-visual-guide-to-marketing-attribution-models).
 
@@ -151,7 +151,7 @@ The synthetic dataset is built to resemble a programmatic marketing funnel:
 - 60% of web users are also ad-targeted, in the range of real programmatic match rates
 
 Paid mix here is 17% of conversions, the low end of the 15–60% range campaigns
-actually run. Turn that up and the gaps get bigger — that's the generator.
+actually run. Turn that up and the gaps get bigger. That's the generator.
 
 ## Validation
 
@@ -165,9 +165,9 @@ are no nulls or type violations, and that row counts and freshness match expecta
 
 ## Documentation
 
-- `DATA_DICTIONARY.md` — table and column definitions
-- `ASSUMPTIONS.md` — data-generation and modeling assumptions
-- dbt docs — `dbt docs generate --profiles-dir .` then `dbt docs serve`
+- `DATA_DICTIONARY.md`: table and column definitions
+- `ASSUMPTIONS.md`: data-generation and modeling assumptions
+- dbt docs: `dbt docs generate --profiles-dir .` then `dbt docs serve`
 
 ## References
 
@@ -177,4 +177,4 @@ are no nulls or type violations, and that row counts and freshness match expecta
 
 ---
 
-Vignesh Hariharan — [LinkedIn](https://linkedin.com/in/h-vignesh) · [GitHub](https://github.com/Vignesh-Hariharan)
+Vignesh Hariharan · [LinkedIn](https://linkedin.com/in/h-vignesh) · [GitHub](https://github.com/Vignesh-Hariharan)
