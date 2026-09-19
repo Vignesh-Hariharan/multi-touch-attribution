@@ -57,13 +57,15 @@ Campaign configuration data.
 ### analytics.fct_attribution
 Final attribution table with revenue credit by touchpoint.
 
+**Grain:** `(conversion_id, touchpoint_id)`. Same session/impression can sit on more than one conversion, so touchpoint_id is not unique here.
+
 | Column | Type | Description |
 |--------|------|-------------|
 | conversion_id | VARCHAR | Transaction identifier |
 | user_pseudo_id | VARCHAR | User identifier |
 | conversion_timestamp | TIMESTAMP | When purchase occurred |
 | total_revenue | DECIMAL(10,2) | Transaction amount |
-| touchpoint_id | VARCHAR | Unique touchpoint identifier |
+| touchpoint_id | VARCHAR | Session id or impression id; unique with conversion_id, not alone |
 | touchpoint_timestamp | TIMESTAMP | When touchpoint occurred |
 | channel | VARCHAR | Marketing channel |
 | touchpoint_type | VARCHAR | impression or session |
@@ -76,7 +78,7 @@ Final attribution table with revenue credit by touchpoint.
 | position_based_revenue | DECIMAL(10,2) | Credit under position-based model |
 
 ### analytics.fct_pathways
-Aggregated conversion paths.
+Aggregated conversion paths. **Grain:** one row per `conversion_id`.
 
 | Column | Type | Description |
 |--------|------|-------------|
