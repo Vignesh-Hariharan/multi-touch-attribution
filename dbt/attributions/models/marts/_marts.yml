@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: fct_attribution
+    description: >
+      Conversion x touchpoint in the 30-day window.
+      Grain is conversion_id, touchpoint_id.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - conversion_id
+            - touchpoint_id
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - conversion_id
+            - touchpoint_position
+    columns:
+      - name: conversion_id
+        description: Purchase transaction this touchpoint is credited against
+        tests:
+          - not_null
+      - name: touchpoint_id
+        description: Session id or impression id
+        tests:
+          - not_null
+      - name: touchpoint_position
+        description: "Position in the conversion path (1 = first)"
+        tests:
+          - not_null
+      - name: total_touchpoints
+        tests:
+          - not_null
+      - name: total_revenue
+        description: Conversion revenue (repeated on each touchpoint row)
+        tests:
+          - not_null
+
+  - name: fct_pathways
+    description: One row per conversion with the ordered channel path.
+    columns:
+      - name: conversion_id
+        tests:
+          - unique
+          - not_null

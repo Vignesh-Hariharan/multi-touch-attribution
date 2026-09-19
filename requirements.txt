@@ -8,6 +8,7 @@ snowflake-connector-python==3.6.0
 
 dbt-core==1.7.4
 dbt-snowflake==1.7.1
+protobuf>=4.21.6,<5
 
 pydantic==2.5.3
 pydantic-settings==2.1.0

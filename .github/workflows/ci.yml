@@ -36,3 +36,9 @@ jobs:
 
       - name: Unit tests
         run: pytest tests -q
+
+      - name: dbt deps and parse
+        working-directory: dbt/attributions
+        run: |
+          dbt deps
+          dbt parse

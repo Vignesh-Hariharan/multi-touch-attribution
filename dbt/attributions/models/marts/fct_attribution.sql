@@ -1,19 +1,8 @@
 {{
     config(
-        materialized='table',
-        unique_key='touchpoint_id'
+        materialized='table'
     )
 }}
-
-/*
-    Core Attribution Model
-    
-    Applies 4 attribution models to calculate revenue credit:
-    1. First Touch: 100% to first touchpoint
-    2. Last Touch: 100% to last touchpoint (baseline)
-    3. Linear: Equal credit across all touchpoints
-    4. Position-Based (U-Shaped): 40% first, 40% last, 20% middle
-*/
 
 WITH attribution_base AS (
     SELECT * FROM {{ ref('int_attribution_window') }}

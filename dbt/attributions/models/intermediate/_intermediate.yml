@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: int_touchpoints
+    description: "Sessions and impressions before the attribution window. Grain is touchpoint_id."
+    columns:
+      - name: touchpoint_id
+        tests:
+          - unique
+          - not_null
+      - name: user_pseudo_id
+        tests:
+          - not_null
+      - name: touchpoint_timestamp
+        tests:
+          - not_null
+
+  - name: int_attribution_window
+    description: "Touchpoints in the attribution window. Grain is conversion_id, touchpoint_id."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - conversion_id
+            - touchpoint_id
+    columns:
+      - name: conversion_id
+        tests:
+          - not_null
+      - name: touchpoint_id
+        tests:
+          - not_null
+      - name: touchpoint_position
+        tests:
+          - not_null
