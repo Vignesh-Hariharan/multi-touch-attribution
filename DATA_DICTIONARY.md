@@ -78,17 +78,16 @@ Final attribution table with revenue credit by touchpoint.
 | position_based_revenue | DECIMAL(10,2) | Credit under position-based model |
 
 ### analytics.fct_pathways
-Aggregated conversion paths. **Grain:** one row per `conversion_id`.
+Pathway patterns with at least two conversions. **Grain:** one row per pathway pattern.
 
 | Column | Type | Description |
 |--------|------|-------------|
-| conversion_id | VARCHAR | Transaction identifier |
-| user_pseudo_id | VARCHAR | User identifier |
-| touchpoint_count | INTEGER | Number of touchpoints |
-| channel_path | VARCHAR | Ordered list of channels |
-| total_revenue | DECIMAL(10,2) | Transaction amount |
-| first_touch_channel | VARCHAR | First channel in path |
-| last_touch_channel | VARCHAR | Last channel in path |
+| pathway | VARCHAR | Ordered channel path |
+| conversion_count | INTEGER | Conversions that followed this path |
+| total_revenue | DECIMAL(10,2) | Revenue on those conversions |
+| avg_revenue | DECIMAL(10,2) | Average conversion revenue |
+| avg_pathway_length | DECIMAL | Average touchpoints on this path |
+| pct_of_conversions | DECIMAL | Share of conversions |
 
 ## Key Metrics
 

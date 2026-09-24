@@ -68,7 +68,7 @@
 
 ### Marketing Strategy
 - Prospecting campaigns focus on awareness and new customer acquisition
-- Analysis compares last-click vs position-based credit on early-stage paid media
+- Analysis compares last-touch vs position-based credit on early-stage paid media
 - Multi-touch journeys occur in 47% of conversions (average 1.9 touchpoints overall)
 - Display ads drive awareness even if they don't directly lead to clicks
 

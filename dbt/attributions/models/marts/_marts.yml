@@ -36,9 +36,9 @@ models:
           - not_null
 
   - name: fct_pathways
-    description: One row per conversion with the ordered channel path.
+    description: One row per pathway pattern.
     columns:
-      - name: conversion_id
+      - name: pathway
         tests:
           - unique
           - not_null
