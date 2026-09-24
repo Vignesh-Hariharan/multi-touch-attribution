@@ -22,12 +22,12 @@ that attributed revenue sums back to actuals.
 
 [View the dashboard on Tableau Public](https://public.tableau.com/views/Multi-TouchAttributionAnalysis/Multi-TouchAttributionAnalysis?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
 
-The live viz compares last-click vs position-based, the pair with a single gap %.
+The live viz compares last-touch vs position-based, the pair with a single gap %.
 First-touch and linear are in the mart.
 
 ## The question
 
-Last-click gives 100% of conversion credit to the final touchpoint. That's the
+Last-touch gives 100% of conversion credit to the final touchpoint. That's the
 platform default, so channels that show up early get less. The pipeline scores
 the same conversions four ways so you can see where the models split, and so all
 four still add up to the same revenue.
@@ -38,7 +38,7 @@ Synthetic data, seed 42. That way dbt tests have a known answer and CI doesn't
 need a GA4 login. On real traffic the gaps move with journey length and paid mix.
 
 Of 220 conversions in this run, 37 (17%) had a paid prospecting touch before
-converting. Position-based vs last-click:
+converting. Position-based vs last-touch:
 
 | Channel | Last-touch | Position-based | Gap |
 |---------|-----------:|---------------:|----:|
@@ -144,7 +144,7 @@ Model diagrams adapted from [Roketto's visual guide to attribution models](https
 
 The synthetic dataset is built to resemble a programmatic marketing funnel:
 
-- 220 conversions ($110K revenue) across 5,833 users (~3.8% conversion rate)
+- 220 conversions (~$58K revenue) across 5,833 users (~3.8% conversion rate)
 - 37 converters (17%) exposed to paid prospecting before converting
 - Average journey length 1.9 touchpoints; 47% multi-touch, 53% single-touch
 - Prospecting ads fire 1–14 days before the first session (cold-audience timing)

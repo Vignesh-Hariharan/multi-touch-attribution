@@ -4,7 +4,7 @@ Impression Generator
 Generates synthetic programmatic ad impression data with realistic timing patterns.
 KEY: Prospecting ads appear EARLY (before first session), retargeting ads appear LATE.
 Prospecting ads fire before the first session, so first-touch and position-based
-credit them; last-click often does not.
+credit them; last-touch often does not.
 """
 
 import argparse

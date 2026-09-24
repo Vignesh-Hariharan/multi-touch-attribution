@@ -1,5 +1,5 @@
 /*
-    Display gap: position-based vs last-click on prospecting_display.
+    Display gap: position-based vs last-touch on prospecting_display.
 
     On seed=42 this lands around +190%. That range is a property of the
     generator (paid mix, journey length, 40/40/20), not a market measurement.
