@@ -3,40 +3,69 @@ version: 2
 models:
   - name: fct_attribution
     description: >
-      Conversion x touchpoint in the 30-day window.
-      Grain is conversion_id, touchpoint_id.
+      Credit per touchpoint under first-touch, last-touch, linear and
+      position-based (40/40/20) models. Grain is conversion_id, touchpoint_id.
+      conversion_revenue repeats on every touchpoint row, so sum the model
+      columns here, never conversion_revenue; revenue KPIs come from fct_conversions.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - conversion_id
             - touchpoint_id
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - conversion_id
-            - touchpoint_position
     columns:
       - name: conversion_id
-        description: Purchase transaction this touchpoint is credited against
         tests:
           - not_null
+          - relationships:
+              to: ref('fct_conversions')
+              field: conversion_id
       - name: touchpoint_id
-        description: Session id or impression id
         tests:
           - not_null
-      - name: touchpoint_position
-        description: "Position in the conversion path (1 = first)"
-        tests:
-          - not_null
-      - name: total_touchpoints
-        tests:
-          - not_null
-      - name: total_revenue
-        description: Conversion revenue (repeated on each touchpoint row)
+      - name: conversion_revenue
         tests:
           - not_null
 
+  - name: fct_conversions
+    description: >
+      One row per purchase with its path summary. touchpoint_count of at least
+      1 is guaranteed by the purchase session's own session_start.
+    columns:
+      - name: conversion_id
+        tests:
+          - unique
+          - not_null
+      - name: revenue
+        tests:
+          - not_null
+      - name: touchpoint_count
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+      - name: pathway
+        tests:
+          - not_null
+
+  - name: agg_channel_attribution
+    description: >
+      One row per channel with revenue credited under each model and the
+      position-based gap against last-touch.
+    columns:
+      - name: channel
+        tests:
+          - unique
+          - not_null
+      - name: channel_group
+        tests:
+          - accepted_values:
+              values: ['Paid media', 'Site visit']
+
   - name: fct_pathways
-    description: One row per pathway pattern.
+    description: >
+      One row per channel sequence that converted at least
+      min_pathway_conversions times. share_of_conversions is over all
+      conversions, including rarer pathways filtered out of this table.
     columns:
       - name: pathway
         tests:
