@@ -10,13 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # Dummy values so the pydantic config validates in CI. Nothing connects to
-    # Snowflake here; only the data-generation and modeling logic is exercised.
-    env:
-      SNOWFLAKE_ACCOUNT: ci-account
-      SNOWFLAKE_USER: ci-user
-      SNOWFLAKE_PASSWORD: ci-password
-
     steps:
       - uses: actions/checkout@v4
 
@@ -28,17 +21,25 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytest ruff
+          pip install -r requirements.txt ruff==0.16.10
 
       - name: Lint
-        run: ruff check src tests --select E9,F63,F7,F82
+        run: ruff check src tests
 
-      - name: Unit tests
+      - name: Generator tests
         run: pytest tests -q
 
-      - name: dbt deps and parse
+      - name: Generate data
+        run: |
+          python src/generate_ga4.py
+          python src/generate_campaigns.py
+          python src/generate_impressions.py
+
+      - name: dbt build on DuckDB
         working-directory: dbt/attributions
         run: |
           dbt deps
-          dbt parse
+          dbt build --profiles-dir . --target local
+
+      - name: Marts match the committed Snowflake exports
+        run: python src/export_marts.py --target local --check

@@ -35,6 +35,8 @@ dbt/attributions/target/
 dbt/attributions/logs/
 dbt/attributions/dbt_packages/
 dbt/attributions/.user.yml
+dbt/attributions/*.duckdb
+dbt/attributions/*.duckdb.wal
 
 # IDE
 .vscode/
@@ -46,6 +48,7 @@ dbt/attributions/.user.yml
 
 # Testing
 .pytest_cache/
+.ruff_cache/
 .coverage
 htmlcov/
 

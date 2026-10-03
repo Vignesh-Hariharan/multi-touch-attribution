@@ -1,0 +1,278 @@
+conversion_id,user_pseudo_id,session_id,conversion_timestamp,conversion_date,revenue,session_channel,device_category,touchpoint_count,paid_touchpoint_count,has_paid_touch,first_touch_channel,last_touch_channel,days_from_first_touch,pathway
+txn_000001,user_005822,session_000244,2024-11-01 22:10:35,2024-11-01,75.53,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000002,user_001714,session_000257,2024-11-02 08:27:00,2024-11-02,274.43,social_facebook,desktop,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000003,user_000093,session_000272,2024-11-02 09:04:37,2024-11-02,257.42,social_facebook,mobile,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000004,user_005748,session_000282,2024-11-02 09:42:56,2024-11-02,206.81,social_facebook,mobile,4,3,True,prospecting_display,social_facebook,1,prospecting_display > prospecting_display > prospecting_native > social_facebook
+txn_000005,user_000499,session_000348,2024-11-02 13:39:39,2024-11-02,89.2,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000006,user_003305,session_000377,2024-11-02 14:53:20,2024-11-02,164.38,referral,mobile,4,3,True,prospecting_video,referral,1,prospecting_video > prospecting_display > prospecting_display > referral
+txn_000007,user_004938,session_000398,2024-11-02 15:45:38,2024-11-02,278.25,google_organic,mobile,2,1,True,prospecting_native,google_organic,0,prospecting_native > google_organic
+txn_000008,user_004694,session_000408,2024-11-02 16:45:26,2024-11-02,22.32,referral,mobile,8,6,True,prospecting_video,referral,1,prospecting_video > prospecting_display > prospecting_display > prospecting_display > direct > retargeting_display > retargeting_video > referral
+txn_000009,user_005162,session_000428,2024-11-02 17:54:26,2024-11-02,185.62,google_organic,mobile,1,0,False,google_organic,google_organic,0,google_organic
+txn_000010,user_002666,session_000442,2024-11-02 18:46:14,2024-11-02,169.13,direct,desktop,2,1,True,prospecting_native,direct,1,prospecting_native > direct
+txn_000011,user_004246,session_000505,2024-11-03 08:21:25,2024-11-03,58.94,social_facebook,mobile,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000012,user_001821,session_000574,2024-11-03 12:25:43,2024-11-03,82.26,direct,desktop,5,4,True,prospecting_native,direct,1,prospecting_native > prospecting_video > prospecting_native > prospecting_native > direct
+txn_000013,user_002939,session_000597,2024-11-03 13:20:50,2024-11-03,534.15,google_organic,mobile,8,6,True,prospecting_video,google_organic,2,prospecting_video > prospecting_video > prospecting_video > prospecting_display > direct > retargeting_video > retargeting_native > google_organic
+txn_000014,user_002408,session_000601,2024-11-03 13:30:14,2024-11-03,216.79,referral,desktop,1,0,False,referral,referral,0,referral
+txn_000015,user_000800,session_000623,2024-11-03 14:46:02,2024-11-03,208.71,google_organic,desktop,1,0,False,google_organic,google_organic,0,google_organic
+txn_000016,user_004889,session_000688,2024-11-03 17:18:30,2024-11-03,77.31,email,desktop,1,0,False,email,email,0,email
+txn_000017,user_002256,session_000714,2024-11-03 18:56:27,2024-11-03,90.78,direct,mobile,4,3,True,prospecting_native,direct,2,prospecting_native > prospecting_native > prospecting_native > direct
+txn_000018,user_000301,session_000720,2024-11-03 19:21:37,2024-11-03,86.73,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000019,user_000983,session_000734,2024-11-03 20:24:50,2024-11-03,28.89,google_organic,mobile,1,0,False,google_organic,google_organic,0,google_organic
+txn_000020,user_005599,session_000782,2024-11-04 09:30:43,2024-11-04,63.06,direct,desktop,4,3,True,prospecting_native,direct,3,prospecting_native > prospecting_native > prospecting_native > direct
+txn_000021,user_003242,session_000860,2024-11-04 13:02:24,2024-11-04,108.71,direct,mobile,2,1,True,prospecting_native,direct,3,prospecting_native > direct
+txn_000022,user_000015,session_000875,2024-11-04 13:25:03,2024-11-04,52.11,google_organic,mobile,1,0,False,google_organic,google_organic,0,google_organic
+txn_000023,user_004413,session_000880,2024-11-04 13:43:27,2024-11-04,52.35,google_organic,mobile,1,0,False,google_organic,google_organic,0,google_organic
+txn_000024,user_003944,session_000922,2024-11-04 16:35:21,2024-11-04,190.93,referral,mobile,2,1,True,prospecting_video,referral,0,prospecting_video > referral
+txn_000025,user_000957,session_000964,2024-11-04 19:13:31,2024-11-04,130.5,referral,tablet,2,1,True,prospecting_display,referral,2,prospecting_display > referral
+txn_000026,user_003464,session_001046,2024-11-05 11:19:58,2024-11-05,234.41,google_organic,mobile,2,0,False,social_facebook,google_organic,4,social_facebook > google_organic
+txn_000027,user_000610,session_001109,2024-11-05 15:18:44,2024-11-05,171.55,referral,mobile,2,1,True,prospecting_native,referral,4,prospecting_native > referral
+txn_000028,user_005960,session_001187,2024-11-05 19:42:05,2024-11-05,75.02,social_facebook,mobile,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000029,user_005197,session_001198,2024-11-05 20:12:56,2024-11-05,64.69,google_organic,desktop,1,0,False,google_organic,google_organic,0,google_organic
+txn_000030,user_002949,session_001199,2024-11-05 20:18:54,2024-11-05,131.91,social_facebook,desktop,4,3,True,prospecting_video,social_facebook,2,prospecting_video > prospecting_display > prospecting_display > social_facebook
+txn_000031,user_001657,session_001294,2024-11-06 11:44:04,2024-11-06,101.37,referral,mobile,1,0,False,referral,referral,0,referral
+txn_000032,user_002645,session_001320,2024-11-06 13:26:51,2024-11-06,206.75,direct,desktop,5,4,True,prospecting_native,direct,2,prospecting_native > prospecting_video > prospecting_display > prospecting_native > direct
+txn_000033,user_001429,session_001384,2024-11-06 16:39:13,2024-11-06,57.05,social_facebook,desktop,4,3,True,prospecting_native,social_facebook,5,prospecting_native > prospecting_native > prospecting_display > social_facebook
+txn_000034,user_004391,session_001394,2024-11-06 17:00:59,2024-11-06,115.78,social_facebook,desktop,4,3,True,prospecting_display,social_facebook,4,prospecting_display > prospecting_native > prospecting_video > social_facebook
+txn_000035,user_000114,session_001440,2024-11-06 19:42:11,2024-11-06,163.77,google_organic,tablet,2,1,True,prospecting_display,google_organic,4,prospecting_display > google_organic
+txn_000036,user_004354,session_001478,2024-11-06 22:03:48,2024-11-06,125.21,direct,mobile,4,3,True,prospecting_video,direct,5,prospecting_video > prospecting_native > prospecting_display > direct
+txn_000037,user_000947,session_001481,2024-11-07 08:09:15,2024-11-07,181.12,referral,mobile,3,2,True,prospecting_display,referral,1,prospecting_display > prospecting_video > referral
+txn_000038,user_000939,session_001525,2024-11-07 11:06:38,2024-11-07,89.6,referral,mobile,7,5,True,prospecting_display,referral,6,prospecting_display > prospecting_native > prospecting_display > prospecting_video > prospecting_video > social_facebook > referral
+txn_000039,user_004160,session_001530,2024-11-07 11:32:03,2024-11-07,173.59,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000040,user_005635,session_001617,2024-11-07 15:52:43,2024-11-07,204.88,referral,mobile,1,0,False,referral,referral,0,referral
+txn_000041,user_005585,session_001648,2024-11-07 17:21:28,2024-11-07,105.84,referral,mobile,2,0,False,social_facebook,referral,4,social_facebook > referral
+txn_000042,user_005562,session_001668,2024-11-07 18:37:09,2024-11-07,64.42,direct,tablet,3,2,True,prospecting_video,direct,6,prospecting_video > prospecting_display > direct
+txn_000043,user_005074,session_001694,2024-11-07 19:53:20,2024-11-07,58.51,direct,desktop,7,5,True,prospecting_display,direct,6,prospecting_display > prospecting_native > prospecting_display > direct > retargeting_video > retargeting_video > direct
+txn_000044,user_002372,session_001698,2024-11-07 20:10:57,2024-11-07,89.7,google_organic,mobile,1,0,False,google_organic,google_organic,0,google_organic
+txn_000045,user_004465,session_001722,2024-11-07 21:42:45,2024-11-07,174.67,social_facebook,desktop,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000046,user_003521,session_001747,2024-11-08 08:39:13,2024-11-08,159.53,direct,mobile,3,2,True,prospecting_display,direct,5,prospecting_display > prospecting_display > direct
+txn_000047,user_005979,session_001777,2024-11-08 09:55:59,2024-11-08,145.9,social_facebook,mobile,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000048,user_000264,session_001868,2024-11-08 15:28:09,2024-11-08,129.1,direct,desktop,1,0,False,direct,direct,0,direct
+txn_000049,user_004085,session_001869,2024-11-08 15:29:29,2024-11-08,127.26,social_facebook,mobile,3,2,True,prospecting_native,social_facebook,5,prospecting_native > prospecting_display > social_facebook
+txn_000050,user_001819,session_001873,2024-11-08 15:44:36,2024-11-08,113.23,google_organic,mobile,6,4,True,prospecting_display,google_organic,5,prospecting_display > prospecting_video > google_organic > retargeting_video > retargeting_video > google_organic
+txn_000051,user_002966,session_001885,2024-11-08 16:18:21,2024-11-08,110.46,social_facebook,mobile,3,2,True,prospecting_display,social_facebook,2,prospecting_display > prospecting_native > social_facebook
+txn_000052,user_000315,session_002016,2024-11-09 09:26:57,2024-11-09,110.16,email,mobile,4,3,True,prospecting_video,email,5,prospecting_video > prospecting_native > prospecting_native > email
+txn_000053,user_004866,session_002025,2024-11-09 10:02:07,2024-11-09,136.7,social_facebook,mobile,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000054,user_005585,session_002109,2024-11-09 14:17:44,2024-11-09,64.65,direct,mobile,3,0,False,social_facebook,direct,6,social_facebook > referral > direct
+txn_000055,user_003410,session_002152,2024-11-09 16:55:58,2024-11-09,325.22,google_organic,desktop,6,5,True,prospecting_native,google_organic,8,prospecting_native > prospecting_display > prospecting_video > prospecting_native > prospecting_native > google_organic
+txn_000056,user_000935,session_002157,2024-11-09 17:12:03,2024-11-09,59.74,direct,mobile,3,2,True,prospecting_video,direct,8,prospecting_video > prospecting_video > direct
+txn_000057,user_000494,session_002193,2024-11-09 19:41:08,2024-11-09,176.76,direct,mobile,3,2,True,prospecting_native,direct,6,prospecting_native > prospecting_display > direct
+txn_000058,user_004375,session_002240,2024-11-10 08:29:55,2024-11-10,77.97,direct,mobile,3,2,True,prospecting_video,direct,6,prospecting_video > prospecting_display > direct
+txn_000059,user_001272,session_002308,2024-11-10 12:59:24,2024-11-10,391.32,referral,mobile,2,1,True,prospecting_video,referral,7,prospecting_video > referral
+txn_000060,user_000504,session_002342,2024-11-10 14:48:36,2024-11-10,124.62,google_organic,tablet,3,2,True,prospecting_video,google_organic,7,prospecting_video > prospecting_video > google_organic
+txn_000061,user_001537,session_002398,2024-11-10 16:39:11,2024-11-10,380.7,social_facebook,desktop,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000062,user_004247,session_002403,2024-11-10 17:11:51,2024-11-10,243.9,google_organic,desktop,4,2,True,google_organic,google_organic,2,google_organic > retargeting_video > retargeting_native > google_organic
+txn_000063,user_004609,session_002528,2024-11-11 10:19:32,2024-11-11,39.4,direct,mobile,6,5,True,prospecting_native,direct,10,prospecting_native > prospecting_native > prospecting_display > prospecting_display > prospecting_display > direct
+txn_000064,user_001892,session_002607,2024-11-11 14:40:03,2024-11-11,51.62,direct,mobile,4,3,True,prospecting_video,direct,10,prospecting_video > prospecting_native > prospecting_native > direct
+txn_000065,user_001775,session_002722,2024-11-11 20:52:28,2024-11-11,73.33,direct,mobile,2,0,False,social_facebook,direct,9,social_facebook > direct
+txn_000066,user_004990,session_002763,2024-11-12 09:29:32,2024-11-12,75.72,social_facebook,mobile,2,0,False,google_organic,social_facebook,6,google_organic > social_facebook
+txn_000067,user_000065,session_002791,2024-11-12 11:27:25,2024-11-12,107.41,direct,desktop,5,2,True,prospecting_display,direct,7,prospecting_display > prospecting_display > social_facebook > direct > direct
+txn_000068,user_000080,session_002819,2024-11-12 13:04:43,2024-11-12,97.37,google_organic,mobile,5,4,True,prospecting_video,google_organic,11,prospecting_video > prospecting_native > prospecting_video > prospecting_native > google_organic
+txn_000069,user_002091,session_002831,2024-11-12 13:41:43,2024-11-12,111.23,direct,mobile,3,2,True,prospecting_native,direct,5,prospecting_native > prospecting_native > direct
+txn_000070,user_002619,session_002875,2024-11-12 16:00:15,2024-11-12,115.36,referral,mobile,2,1,True,prospecting_native,referral,5,prospecting_native > referral
+txn_000071,user_004340,session_002926,2024-11-12 18:49:25,2024-11-12,130.55,direct,mobile,2,0,False,email,direct,10,email > direct
+txn_000072,user_003151,session_003001,2024-11-13 09:00:38,2024-11-13,169.44,social_facebook,desktop,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000073,user_001267,session_003160,2024-11-13 18:03:34,2024-11-13,142.39,direct,desktop,4,3,True,prospecting_native,direct,8,prospecting_native > prospecting_video > prospecting_native > direct
+txn_000074,user_002951,session_003178,2024-11-13 19:03:06,2024-11-13,123.25,google_organic,tablet,8,5,True,prospecting_native,google_organic,12,prospecting_native > prospecting_video > prospecting_native > direct > google_organic > retargeting_display > retargeting_video > google_organic
+txn_000075,user_004494,session_003189,2024-11-13 19:47:57,2024-11-13,254.03,referral,desktop,5,3,True,prospecting_video,referral,11,prospecting_video > direct > retargeting_video > retargeting_display > referral
+txn_000076,user_001478,session_003207,2024-11-13 20:39:24,2024-11-13,120.03,google_organic,desktop,4,3,True,prospecting_display,google_organic,12,prospecting_display > prospecting_native > prospecting_native > google_organic
+txn_000077,user_000813,session_003235,2024-11-14 08:22:31,2024-11-14,154.16,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000078,user_001715,session_003273,2024-11-14 10:08:54,2024-11-14,150.47,google_organic,desktop,5,3,True,prospecting_native,google_organic,7,prospecting_native > prospecting_video > referral > retargeting_display > google_organic
+txn_000079,user_003415,session_003321,2024-11-14 11:58:12,2024-11-14,81.54,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000080,user_005343,session_003372,2024-11-14 15:01:56,2024-11-14,44.13,direct,desktop,3,0,False,email,direct,6,email > direct > direct
+txn_000081,user_004216,session_003446,2024-11-14 18:46:14,2024-11-14,41.27,direct,desktop,4,2,True,prospecting_display,direct,12,prospecting_display > referral > retargeting_video > direct
+txn_000082,user_001104,session_003471,2024-11-14 19:59:24,2024-11-14,110.66,google_organic,mobile,1,0,False,google_organic,google_organic,0,google_organic
+txn_000083,user_002348,session_003479,2024-11-14 20:28:36,2024-11-14,53.06,google_organic,desktop,4,2,True,prospecting_native,google_organic,13,prospecting_native > prospecting_display > direct > google_organic
+txn_000084,user_000240,session_003481,2024-11-14 20:35:48,2024-11-14,160.55,direct,mobile,6,4,True,prospecting_native,direct,13,prospecting_native > prospecting_native > direct > retargeting_video > retargeting_video > direct
+txn_000085,user_002190,session_003492,2024-11-14 21:04:14,2024-11-14,90.68,google_organic,mobile,6,4,True,prospecting_video,google_organic,12,prospecting_video > prospecting_display > direct > retargeting_display > retargeting_display > google_organic
+txn_000086,user_001239,session_003556,2024-11-15 10:38:31,2024-11-15,48.92,social_facebook,mobile,3,1,True,prospecting_native,social_facebook,8,prospecting_native > google_organic > social_facebook
+txn_000087,user_004177,session_003571,2024-11-15 11:30:30,2024-11-15,164.3,google_organic,mobile,3,2,True,prospecting_native,google_organic,9,prospecting_native > prospecting_display > google_organic
+txn_000088,user_001314,session_003757,2024-11-15 22:06:19,2024-11-15,125.1,direct,mobile,3,2,True,prospecting_video,direct,13,prospecting_video > prospecting_display > direct
+txn_000089,user_005027,session_003838,2024-11-16 12:11:59,2024-11-16,430.07,referral,mobile,8,6,True,prospecting_video,referral,11,prospecting_video > prospecting_display > prospecting_native > social_facebook > retargeting_native > retargeting_display > retargeting_native > referral
+txn_000090,user_000343,session_003886,2024-11-16 14:15:08,2024-11-16,138.94,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000091,user_005864,session_003983,2024-11-16 20:16:16,2024-11-16,102.04,social_facebook,desktop,2,0,False,direct,social_facebook,12,direct > social_facebook
+txn_000092,user_002371,session_003992,2024-11-16 20:50:36,2024-11-16,53.68,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000093,user_002800,session_003999,2024-11-16 21:22:04,2024-11-16,134.82,direct,mobile,2,0,False,google_organic,direct,0,google_organic > direct
+txn_000094,user_002018,session_004016,2024-11-16 22:06:26,2024-11-16,69.07,direct,tablet,1,0,False,direct,direct,0,direct
+txn_000095,user_005788,session_004033,2024-11-17 09:14:54,2024-11-17,84.47,referral,desktop,3,0,False,email,referral,9,email > social_facebook > referral
+txn_000096,user_001048,session_004077,2024-11-17 11:07:34,2024-11-17,163.09,direct,mobile,7,5,True,prospecting_display,direct,13,prospecting_display > prospecting_display > prospecting_display > email > retargeting_native > retargeting_display > direct
+txn_000097,user_001776,session_004237,2024-11-17 19:02:24,2024-11-17,58.49,direct,desktop,1,0,False,direct,direct,0,direct
+txn_000098,user_000131,session_004245,2024-11-17 19:47:17,2024-11-17,38.48,direct,mobile,2,0,False,direct,direct,13,direct > direct
+txn_000099,user_003289,session_004330,2024-11-18 10:16:43,2024-11-18,53.89,google_organic,desktop,3,2,True,prospecting_display,google_organic,12,prospecting_display > prospecting_video > google_organic
+txn_000100,user_002094,session_004340,2024-11-18 11:24:23,2024-11-18,104.24,google_organic,mobile,3,2,True,prospecting_video,google_organic,4,prospecting_video > prospecting_video > google_organic
+txn_000101,user_003561,session_004390,2024-11-18 13:57:36,2024-11-18,607.69,direct,desktop,6,4,True,prospecting_video,direct,10,prospecting_video > prospecting_native > direct > retargeting_display > retargeting_video > direct
+txn_000102,user_005718,session_004407,2024-11-18 14:51:49,2024-11-18,107.92,direct,mobile,4,2,True,prospecting_video,direct,15,prospecting_video > email > retargeting_native > direct
+txn_000103,user_001019,session_004438,2024-11-18 16:00:53,2024-11-18,128.33,google_organic,mobile,3,2,True,prospecting_display,google_organic,6,prospecting_display > prospecting_display > google_organic
+txn_000104,user_002385,session_004440,2024-11-18 16:11:52,2024-11-18,194.39,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000105,user_004438,session_004457,2024-11-18 17:12:04,2024-11-18,61.01,social_facebook,mobile,7,5,True,prospecting_display,social_facebook,17,prospecting_display > prospecting_display > prospecting_display > google_organic > retargeting_display > retargeting_display > social_facebook
+txn_000106,user_000546,session_004515,2024-11-18 20:22:05,2024-11-18,34.14,social_facebook,desktop,3,2,True,prospecting_native,social_facebook,10,prospecting_native > prospecting_native > social_facebook
+txn_000107,user_002439,session_004541,2024-11-18 21:40:29,2024-11-18,63.28,referral,mobile,9,7,True,prospecting_native,referral,14,prospecting_native > prospecting_display > prospecting_display > prospecting_native > prospecting_native > google_organic > retargeting_native > retargeting_display > referral
+txn_000108,user_004365,session_004546,2024-11-18 21:48:24,2024-11-18,34.14,referral,desktop,2,1,True,prospecting_display,referral,3,prospecting_display > referral
+txn_000109,user_005305,session_004561,2024-11-19 08:37:30,2024-11-19,91.86,email,desktop,1,0,False,email,email,0,email
+txn_000110,user_003319,session_004566,2024-11-19 09:03:34,2024-11-19,125.15,direct,mobile,6,3,True,prospecting_display,direct,18,prospecting_display > prospecting_native > direct > direct > retargeting_native > direct
+txn_000111,user_004428,session_004574,2024-11-19 09:19:30,2024-11-19,147.9,email,mobile,3,2,True,prospecting_native,email,12,prospecting_native > prospecting_display > email
+txn_000112,user_003382,session_004581,2024-11-19 09:47:30,2024-11-19,116.64,email,mobile,4,3,True,prospecting_display,email,7,prospecting_display > prospecting_native > prospecting_video > email
+txn_000113,user_005690,session_004609,2024-11-19 11:21:26,2024-11-19,276.4,direct,mobile,2,0,False,google_organic,direct,12,google_organic > direct
+txn_000114,user_003180,session_004686,2024-11-19 14:59:36,2024-11-19,102.87,direct,desktop,4,2,True,prospecting_display,direct,4,prospecting_display > google_organic > retargeting_display > direct
+txn_000115,user_001944,session_004814,2024-11-19 21:14:58,2024-11-19,31.98,direct,tablet,3,2,True,prospecting_video,direct,6,prospecting_video > prospecting_display > direct
+txn_000116,user_005637,session_004864,2024-11-20 09:48:00,2024-11-20,198.25,referral,desktop,3,2,True,prospecting_video,referral,10,prospecting_video > prospecting_native > referral
+txn_000117,user_001433,session_004866,2024-11-20 09:56:13,2024-11-20,228.73,google_organic,desktop,6,3,True,prospecting_video,google_organic,15,prospecting_video > prospecting_display > direct > direct > retargeting_video > google_organic
+txn_000118,user_002403,session_004898,2024-11-20 11:47:48,2024-11-20,275.78,direct,desktop,3,0,False,direct,direct,8,direct > google_organic > direct
+txn_000119,user_005823,session_004906,2024-11-20 11:56:18,2024-11-20,126.5,google_organic,mobile,2,0,False,direct,google_organic,14,direct > google_organic
+txn_000120,user_005105,session_004918,2024-11-20 12:48:26,2024-11-20,37.54,direct,desktop,2,1,True,prospecting_native,direct,8,prospecting_native > direct
+txn_000121,user_004484,session_004922,2024-11-20 12:57:49,2024-11-20,336.36,google_organic,desktop,1,0,False,google_organic,google_organic,0,google_organic
+txn_000122,user_003373,session_004937,2024-11-20 13:53:48,2024-11-20,84.32,google_organic,mobile,6,4,True,prospecting_video,google_organic,18,prospecting_video > prospecting_display > google_organic > retargeting_display > retargeting_native > google_organic
+txn_000123,user_000301,session_005047,2024-11-20 19:57:04,2024-11-20,196.17,direct,mobile,2,0,False,direct,direct,17,direct > direct
+txn_000124,user_005707,session_005065,2024-11-20 20:44:13,2024-11-20,85.21,direct,desktop,4,3,True,prospecting_video,direct,8,prospecting_video > prospecting_display > prospecting_native > direct
+txn_000125,user_004720,session_005073,2024-11-20 21:16:36,2024-11-20,93.18,direct,mobile,4,3,True,prospecting_native,direct,12,prospecting_native > prospecting_native > prospecting_native > direct
+txn_000126,user_005825,session_005105,2024-11-21 08:39:47,2024-11-21,115.3,direct,desktop,1,0,False,direct,direct,0,direct
+txn_000127,user_004419,session_005125,2024-11-21 09:47:10,2024-11-21,132.91,direct,mobile,3,2,True,prospecting_display,direct,3,prospecting_display > prospecting_native > direct
+txn_000128,user_004170,session_005259,2024-11-21 17:08:26,2024-11-21,193.93,referral,mobile,9,7,True,prospecting_display,referral,20,prospecting_display > prospecting_video > prospecting_display > prospecting_native > prospecting_video > google_organic > retargeting_video > retargeting_video > referral
+txn_000129,user_004681,session_005285,2024-11-21 18:02:46,2024-11-21,151.53,google_organic,mobile,1,0,False,google_organic,google_organic,0,google_organic
+txn_000130,user_005291,session_005313,2024-11-21 19:48:04,2024-11-21,46.36,direct,tablet,2,0,False,google_organic,direct,18,google_organic > direct
+txn_000131,user_004088,session_005352,2024-11-21 21:53:00,2024-11-21,63.25,direct,desktop,2,0,False,direct,direct,18,direct > direct
+txn_000132,user_001423,session_005395,2024-11-22 10:38:37,2024-11-22,61.89,social_facebook,desktop,2,0,False,social_facebook,social_facebook,21,social_facebook > social_facebook
+txn_000133,user_003915,session_005474,2024-11-22 15:02:57,2024-11-22,204.09,social_facebook,mobile,6,4,True,prospecting_video,social_facebook,7,prospecting_video > prospecting_video > prospecting_display > direct > retargeting_native > social_facebook
+txn_000134,user_001786,session_005546,2024-11-22 19:18:47,2024-11-22,83.03,social_facebook,mobile,5,3,True,prospecting_native,social_facebook,15,prospecting_native > direct > retargeting_native > retargeting_display > social_facebook
+txn_000135,user_000536,session_005547,2024-11-22 19:21:40,2024-11-22,88.45,google_organic,tablet,5,3,True,prospecting_video,google_organic,11,prospecting_video > prospecting_video > referral > retargeting_display > google_organic
+txn_000136,user_000197,session_005548,2024-11-22 19:22:20,2024-11-22,104.58,direct,mobile,6,3,True,prospecting_display,direct,21,prospecting_display > prospecting_native > prospecting_native > social_facebook > referral > direct
+txn_000137,user_005436,session_005604,2024-11-23 08:53:17,2024-11-23,87.65,referral,desktop,8,6,True,prospecting_video,referral,5,prospecting_video > prospecting_display > direct > retargeting_video > retargeting_native > retargeting_video > retargeting_video > referral
+txn_000138,user_002167,session_005650,2024-11-23 11:26:19,2024-11-23,56.08,google_organic,desktop,4,2,True,prospecting_native,google_organic,22,prospecting_native > direct > retargeting_native > google_organic
+txn_000139,user_000500,session_005654,2024-11-23 11:50:33,2024-11-23,87.64,social_facebook,mobile,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000140,user_005829,session_005658,2024-11-23 12:06:34,2024-11-23,70.32,google_organic,desktop,10,7,True,prospecting_video,google_organic,21,prospecting_video > prospecting_video > prospecting_native > prospecting_native > google_organic > direct > retargeting_display > retargeting_video > retargeting_native > google_organic
+txn_000141,user_005112,session_005662,2024-11-23 12:28:45,2024-11-23,102.46,google_organic,mobile,6,5,True,prospecting_display,google_organic,13,prospecting_display > prospecting_video > prospecting_native > prospecting_native > prospecting_native > google_organic
+txn_000142,user_004236,session_005812,2024-11-23 20:03:20,2024-11-23,98.91,referral,tablet,10,7,True,prospecting_display,referral,21,prospecting_display > prospecting_video > prospecting_native > prospecting_native > google_organic > google_organic > retargeting_display > retargeting_video > retargeting_native > referral
+txn_000143,user_005653,session_005815,2024-11-23 19:48:54,2024-11-23,61.91,referral,mobile,1,0,False,referral,referral,0,referral
+txn_000144,user_004870,session_005818,2024-11-23 20:05:44,2024-11-23,67.02,google_organic,tablet,2,0,False,google_organic,google_organic,15,google_organic > google_organic
+txn_000145,user_004810,session_005842,2024-11-23 21:10:46,2024-11-23,128.64,google_organic,mobile,5,4,True,prospecting_native,google_organic,13,prospecting_native > prospecting_video > prospecting_video > prospecting_display > google_organic
+txn_000146,user_001519,session_005857,2024-11-23 21:58:10,2024-11-23,98.31,direct,desktop,3,1,True,email,direct,5,email > retargeting_display > direct
+txn_000147,user_000584,session_005886,2024-11-24 10:01:52,2024-11-24,185.99,google_organic,mobile,6,4,True,prospecting_display,google_organic,15,prospecting_display > prospecting_native > prospecting_native > direct > retargeting_video > google_organic
+txn_000148,user_000870,session_006050,2024-11-24 19:52:58,2024-11-24,259.17,direct,desktop,1,0,False,direct,direct,0,direct
+txn_000149,user_003353,session_006083,2024-11-24 21:52:32,2024-11-24,120.14,direct,desktop,2,1,True,prospecting_display,direct,11,prospecting_display > direct
+txn_000150,user_004198,session_006092,2024-11-25 08:25:26,2024-11-25,113.05,referral,mobile,6,3,True,prospecting_native,referral,19,prospecting_native > google_organic > retargeting_display > direct > retargeting_native > referral
+txn_000151,user_000182,session_006104,2024-11-25 09:02:42,2024-11-25,79.27,email,desktop,8,5,True,prospecting_display,email,14,prospecting_display > prospecting_native > referral > retargeting_video > retargeting_native > retargeting_display > google_organic > email
+txn_000152,user_004169,session_006115,2024-11-25 09:38:07,2024-11-25,35.19,google_organic,desktop,2,0,False,direct,google_organic,11,direct > google_organic
+txn_000153,user_000952,session_006193,2024-11-25 13:18:46,2024-11-25,115.42,direct,mobile,8,4,True,prospecting_video,direct,22,prospecting_video > prospecting_display > prospecting_video > google_organic > retargeting_display > google_organic > google_organic > direct
+txn_000154,user_002273,session_006228,2024-11-25 15:30:19,2024-11-25,230.33,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000155,user_005941,session_006243,2024-11-25 16:26:47,2024-11-25,138.27,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000156,user_002435,session_006266,2024-11-25 17:36:11,2024-11-25,145.57,google_organic,mobile,4,0,False,direct,google_organic,22,direct > referral > direct > google_organic
+txn_000157,user_003587,session_006334,2024-11-25 21:45:10,2024-11-25,500.87,direct,mobile,2,0,False,direct,direct,0,direct > direct
+txn_000158,user_002680,session_006347,2024-11-26 08:16:51,2024-11-26,127.57,email,mobile,1,0,False,email,email,0,email
+txn_000159,user_002741,session_006381,2024-11-26 10:20:14,2024-11-26,156.5,social_facebook,desktop,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000160,user_004759,session_006468,2024-11-26 14:28:20,2024-11-26,249.49,google_organic,mobile,2,0,False,google_organic,google_organic,6,google_organic > google_organic
+txn_000161,user_003174,session_006478,2024-11-26 14:50:15,2024-11-26,202.84,direct,desktop,6,4,True,prospecting_display,direct,23,prospecting_display > prospecting_video > referral > retargeting_video > retargeting_native > direct
+txn_000162,user_005175,session_006499,2024-11-26 16:14:38,2024-11-26,457.14,google_organic,mobile,7,5,True,prospecting_video,google_organic,22,prospecting_video > prospecting_display > prospecting_display > direct > retargeting_native > retargeting_video > google_organic
+txn_000163,user_001526,session_006506,2024-11-26 16:24:57,2024-11-26,43.97,social_facebook,mobile,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000164,user_005475,session_006511,2024-11-26 16:36:12,2024-11-26,130.14,referral,mobile,10,7,True,prospecting_video,referral,24,prospecting_video > prospecting_native > prospecting_display > prospecting_display > social_facebook > retargeting_video > retargeting_video > retargeting_video > email > referral
+txn_000165,user_005285,session_006518,2024-11-26 17:08:11,2024-11-26,73.94,direct,mobile,2,1,True,prospecting_display,direct,2,prospecting_display > direct
+txn_000166,user_000342,session_006573,2024-11-26 20:26:57,2024-11-26,29.23,google_organic,mobile,3,2,True,prospecting_video,google_organic,13,prospecting_video > prospecting_native > google_organic
+txn_000167,user_004063,session_006640,2024-11-27 10:28:50,2024-11-27,42.03,social_facebook,mobile,3,2,True,prospecting_native,social_facebook,11,prospecting_native > prospecting_display > social_facebook
+txn_000168,user_003432,session_006772,2024-11-27 17:21:08,2024-11-27,144.03,google_organic,mobile,2,0,False,direct,google_organic,8,direct > google_organic
+txn_000169,user_004960,session_006781,2024-11-27 17:55:41,2024-11-27,90.06,google_organic,desktop,3,2,True,prospecting_display,google_organic,4,prospecting_display > prospecting_video > google_organic
+txn_000170,user_004482,session_006904,2024-11-28 11:16:32,2024-11-28,61.84,google_organic,mobile,1,0,False,google_organic,google_organic,0,google_organic
+txn_000171,user_000190,session_006949,2024-11-28 14:18:48,2024-11-28,319.53,social_facebook,mobile,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000172,user_000515,session_006976,2024-11-28 16:02:20,2024-11-28,56.56,google_organic,mobile,4,2,True,prospecting_video,google_organic,3,prospecting_video > email > retargeting_display > google_organic
+txn_000173,user_003844,session_006990,2024-11-28 16:41:22,2024-11-28,88.68,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000174,user_004013,session_007028,2024-11-28 19:03:42,2024-11-28,212.93,google_organic,mobile,8,6,True,prospecting_native,google_organic,27,prospecting_native > prospecting_display > prospecting_video > direct > retargeting_display > retargeting_video > retargeting_display > google_organic
+txn_000175,user_005363,session_007032,2024-11-28 19:18:09,2024-11-28,80.57,referral,desktop,3,0,False,social_facebook,referral,26,social_facebook > direct > referral
+txn_000176,user_001820,session_007060,2024-11-28 20:43:11,2024-11-28,142.69,referral,mobile,2,0,False,social_facebook,referral,23,social_facebook > referral
+txn_000177,user_001571,session_007101,2024-11-29 09:02:20,2024-11-29,57.11,social_facebook,desktop,7,5,True,prospecting_video,social_facebook,21,prospecting_video > prospecting_video > direct > retargeting_video > retargeting_video > retargeting_video > social_facebook
+txn_000178,user_002469,session_007253,2024-11-29 17:37:42,2024-11-29,85.03,direct,mobile,3,2,True,prospecting_native,direct,13,prospecting_native > prospecting_video > direct
+txn_000179,user_003924,session_007280,2024-11-29 19:22:32,2024-11-29,151.06,social_facebook,desktop,2,0,False,google_organic,social_facebook,14,google_organic > social_facebook
+txn_000180,user_000802,session_007446,2024-11-30 15:07:36,2024-11-30,39.48,direct,desktop,2,1,True,prospecting_native,direct,10,prospecting_native > direct
+txn_000181,user_004126,session_007515,2024-11-30 18:27:33,2024-11-30,79.17,social_facebook,mobile,5,3,True,prospecting_native,social_facebook,16,prospecting_native > social_facebook > retargeting_video > retargeting_native > social_facebook
+txn_000182,user_002833,session_007520,2024-11-30 18:36:50,2024-11-30,110.57,social_facebook,mobile,2,1,True,prospecting_display,social_facebook,13,prospecting_display > social_facebook
+txn_000183,user_005139,session_007546,2024-11-30 19:50:19,2024-11-30,241.03,email,mobile,4,3,True,prospecting_video,email,11,prospecting_video > prospecting_native > prospecting_display > email
+txn_000184,user_001877,session_007684,2024-12-01 13:56:44,2024-12-01,92.22,direct,mobile,5,4,True,prospecting_video,direct,13,prospecting_video > prospecting_native > prospecting_display > prospecting_display > direct
+txn_000185,user_002737,session_007691,2024-12-01 14:21:51,2024-12-01,100.21,direct,desktop,3,1,True,social_facebook,direct,2,social_facebook > retargeting_native > direct
+txn_000186,user_003119,session_007744,2024-12-01 17:47:47,2024-12-01,243.19,direct,desktop,4,3,True,prospecting_video,direct,10,prospecting_video > prospecting_display > prospecting_native > direct
+txn_000187,user_002745,session_007759,2024-12-01 18:40:25,2024-12-01,47.04,email,mobile,7,5,True,prospecting_native,email,27,prospecting_native > prospecting_native > prospecting_display > prospecting_display > prospecting_native > google_organic > email
+txn_000188,user_002973,session_007762,2024-12-01 18:49:39,2024-12-01,142.89,direct,mobile,3,2,True,prospecting_native,direct,6,prospecting_native > prospecting_native > direct
+txn_000189,user_002245,session_007874,2024-12-02 11:24:14,2024-12-02,40.69,social_facebook,desktop,5,3,True,prospecting_video,social_facebook,30,prospecting_video > prospecting_native > prospecting_video > email > social_facebook
+txn_000190,user_002923,session_007904,2024-12-02 13:36:37,2024-12-02,44.71,referral,desktop,3,2,True,prospecting_display,referral,11,prospecting_display > prospecting_display > referral
+txn_000191,user_003100,session_007910,2024-12-02 14:02:23,2024-12-02,119.66,google_organic,mobile,2,0,False,google_organic,google_organic,25,google_organic > google_organic
+txn_000192,user_000909,session_007949,2024-12-02 16:09:27,2024-12-02,35.44,google_organic,mobile,5,3,True,prospecting_display,google_organic,9,prospecting_display > google_organic > retargeting_native > retargeting_display > google_organic
+txn_000193,user_004912,session_008012,2024-12-02 19:45:59,2024-12-02,136.08,google_organic,mobile,1,0,False,google_organic,google_organic,0,google_organic
+txn_000194,user_003286,session_008013,2024-12-02 19:40:20,2024-12-02,79.33,referral,mobile,7,4,True,google_organic,referral,27,google_organic > retargeting_video > retargeting_video > retargeting_video > retargeting_video > direct > referral
+txn_000195,user_002403,session_008029,2024-12-02 20:18:58,2024-12-02,273.16,direct,desktop,4,0,False,direct,direct,20,direct > google_organic > direct > direct
+txn_000196,user_001094,session_008048,2024-12-02 21:24:53,2024-12-02,160.1,email,desktop,6,5,True,prospecting_display,email,13,prospecting_display > prospecting_video > prospecting_video > prospecting_native > prospecting_native > email
+txn_000197,user_002199,session_008113,2024-12-03 11:21:20,2024-12-03,355.49,direct,desktop,1,0,False,direct,direct,0,direct
+txn_000198,user_001228,session_008171,2024-12-03 14:16:38,2024-12-03,19.71,google_organic,mobile,1,0,False,google_organic,google_organic,0,google_organic
+txn_000199,user_002671,session_008172,2024-12-03 14:20:44,2024-12-03,115.52,social_facebook,desktop,2,0,False,social_facebook,social_facebook,3,social_facebook > social_facebook
+txn_000200,user_004758,session_008235,2024-12-03 17:30:09,2024-12-03,184.98,direct,mobile,2,1,True,prospecting_video,direct,5,prospecting_video > direct
+txn_000201,user_004695,session_008253,2024-12-03 18:24:55,2024-12-03,57.8,google_organic,desktop,2,0,False,referral,google_organic,8,referral > google_organic
+txn_000202,user_001916,session_008299,2024-12-03 21:39:59,2024-12-03,131.02,google_organic,mobile,4,1,True,direct,google_organic,29,direct > retargeting_display > google_organic > google_organic
+txn_000203,user_005089,session_008327,2024-12-04 09:33:49,2024-12-04,92.14,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000204,user_003814,session_008343,2024-12-04 10:26:12,2024-12-04,155.49,direct,mobile,2,1,True,prospecting_native,direct,6,prospecting_native > direct
+txn_000205,user_001628,session_008381,2024-12-04 12:54:10,2024-12-04,199.9,social_facebook,mobile,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000206,user_002622,session_008403,2024-12-04 13:50:52,2024-12-04,106.14,google_organic,mobile,3,2,True,prospecting_display,google_organic,12,prospecting_display > prospecting_display > google_organic
+txn_000207,user_002207,session_008463,2024-12-04 17:08:05,2024-12-04,67.97,email,mobile,1,0,False,email,email,0,email
+txn_000208,user_005873,session_008470,2024-12-04 17:23:56,2024-12-04,146.28,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000209,user_005550,session_008573,2024-12-05 08:40:24,2024-12-05,61.79,social_facebook,desktop,2,1,True,retargeting_native,social_facebook,28,retargeting_native > social_facebook
+txn_000210,user_002592,session_008580,2024-12-05 08:58:31,2024-12-05,112.53,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000211,user_005329,session_008610,2024-12-05 10:23:14,2024-12-05,157.29,social_facebook,desktop,2,0,False,google_organic,social_facebook,4,google_organic > social_facebook
+txn_000212,user_000289,session_008675,2024-12-05 13:46:09,2024-12-05,126.93,direct,mobile,6,3,True,prospecting_native,direct,18,prospecting_native > prospecting_display > prospecting_video > referral > social_facebook > direct
+txn_000213,user_005509,session_008727,2024-12-05 16:46:49,2024-12-05,190.37,direct,mobile,3,1,True,prospecting_display,direct,20,prospecting_display > referral > direct
+txn_000214,user_002663,session_008740,2024-12-05 17:20:52,2024-12-05,79.92,direct,desktop,3,2,True,prospecting_display,direct,5,prospecting_display > prospecting_display > direct
+txn_000215,user_003222,session_008741,2024-12-05 17:30:01,2024-12-05,77.33,referral,mobile,3,2,True,prospecting_native,referral,10,prospecting_native > prospecting_native > referral
+txn_000216,user_000608,session_008747,2024-12-05 17:32:46,2024-12-05,61.84,google_organic,mobile,3,0,False,direct,google_organic,24,direct > referral > google_organic
+txn_000217,user_005054,session_008776,2024-12-05 19:01:12,2024-12-05,209.84,google_organic,mobile,2,1,True,prospecting_native,google_organic,6,prospecting_native > google_organic
+txn_000218,user_005356,session_008829,2024-12-06 08:20:59,2024-12-06,59.84,social_facebook,desktop,6,4,True,social_facebook,social_facebook,26,social_facebook > retargeting_native > retargeting_display > retargeting_video > retargeting_video > social_facebook
+txn_000219,user_001814,session_008837,2024-12-06 08:41:16,2024-12-06,89.79,google_organic,mobile,4,3,True,prospecting_native,google_organic,9,prospecting_native > prospecting_video > prospecting_video > google_organic
+txn_000220,user_005482,session_008856,2024-12-06 09:42:37,2024-12-06,103.76,direct,desktop,3,0,False,direct,direct,28,direct > direct > direct
+txn_000221,user_000322,session_008901,2024-12-06 13:13:33,2024-12-06,282.81,google_organic,desktop,3,2,True,prospecting_video,google_organic,8,prospecting_video > prospecting_video > google_organic
+txn_000222,user_001019,session_008927,2024-12-06 14:43:56,2024-12-06,113.56,social_facebook,mobile,4,2,True,prospecting_display,social_facebook,24,prospecting_display > prospecting_display > google_organic > social_facebook
+txn_000223,user_000030,session_008942,2024-12-06 15:32:34,2024-12-06,143.35,social_facebook,tablet,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000224,user_002442,session_008953,2024-12-06 16:03:41,2024-12-06,69.03,direct,mobile,12,7,True,prospecting_video,direct,28,prospecting_video > prospecting_native > prospecting_native > prospecting_display > direct > google_organic > referral > retargeting_native > retargeting_video > retargeting_native > direct > direct
+txn_000225,user_003609,session_008965,2024-12-06 16:39:33,2024-12-06,440.46,direct,desktop,8,6,True,prospecting_video,direct,29,prospecting_video > prospecting_native > google_organic > retargeting_native > retargeting_video > retargeting_native > retargeting_video > direct
+txn_000226,user_002083,session_009044,2024-12-06 21:29:20,2024-12-06,108.64,direct,desktop,4,3,True,prospecting_video,direct,11,prospecting_video > prospecting_video > prospecting_display > direct
+txn_000227,user_004249,session_009152,2024-12-07 14:21:06,2024-12-07,155.66,email,mobile,2,1,True,prospecting_display,email,14,prospecting_display > email
+txn_000228,user_003097,session_009171,2024-12-07 15:38:05,2024-12-07,349.6,direct,desktop,6,3,True,prospecting_video,direct,27,prospecting_video > direct > retargeting_native > retargeting_display > google_organic > direct
+txn_000229,user_002417,session_009175,2024-12-07 16:02:55,2024-12-07,88.02,google_organic,mobile,3,0,False,referral,google_organic,29,referral > google_organic > google_organic
+txn_000230,user_003500,session_009226,2024-12-07 18:56:48,2024-12-07,112.22,direct,mobile,3,0,False,google_organic,direct,28,google_organic > google_organic > direct
+txn_000231,user_000321,session_009262,2024-12-07 21:03:41,2024-12-07,115.58,direct,desktop,2,1,True,prospecting_display,direct,10,prospecting_display > direct
+txn_000232,user_002981,session_009269,2024-12-07 21:32:40,2024-12-07,156.96,direct,mobile,2,0,False,google_organic,direct,2,google_organic > direct
+txn_000233,user_004168,session_009300,2024-12-08 09:09:25,2024-12-08,57.83,email,mobile,1,0,False,email,email,0,email
+txn_000234,user_005076,session_009302,2024-12-08 09:11:26,2024-12-08,188.24,direct,desktop,3,0,False,direct,direct,17,direct > google_organic > direct
+txn_000235,user_004032,session_009310,2024-12-08 09:22:58,2024-12-08,244.97,direct,mobile,5,3,True,prospecting_display,direct,11,prospecting_display > prospecting_native > direct > retargeting_display > direct
+txn_000236,user_003005,session_009346,2024-12-08 11:15:35,2024-12-08,185.71,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000237,user_002674,session_009373,2024-12-08 13:02:19,2024-12-08,154.0,social_facebook,mobile,10,8,True,prospecting_video,social_facebook,11,prospecting_video > prospecting_native > prospecting_native > prospecting_video > prospecting_display > direct > retargeting_native > retargeting_native > retargeting_native > social_facebook
+txn_000238,user_004264,session_009380,2024-12-08 13:20:13,2024-12-08,124.08,social_facebook,mobile,3,2,True,prospecting_video,social_facebook,7,prospecting_video > prospecting_native > social_facebook
+txn_000239,user_003429,session_009555,2024-12-09 08:59:27,2024-12-09,135.78,direct,mobile,7,5,True,prospecting_video,direct,14,prospecting_video > prospecting_native > prospecting_video > prospecting_video > direct > retargeting_display > direct
+txn_000240,user_000942,session_009583,2024-12-09 10:26:56,2024-12-09,204.99,google_organic,mobile,3,1,True,google_organic,google_organic,22,google_organic > retargeting_video > google_organic
+txn_000241,user_002077,session_009676,2024-12-09 14:48:37,2024-12-09,123.36,google_organic,desktop,1,0,False,google_organic,google_organic,0,google_organic
+txn_000242,user_003454,session_009727,2024-12-09 17:09:49,2024-12-09,80.13,social_facebook,desktop,5,1,True,google_organic,social_facebook,27,google_organic > direct > retargeting_native > direct > social_facebook
+txn_000243,user_002317,session_009792,2024-12-09 20:14:34,2024-12-09,154.13,direct,desktop,2,1,True,prospecting_native,direct,1,prospecting_native > direct
+txn_000244,user_001742,session_009805,2024-12-09 20:45:16,2024-12-09,131.23,google_organic,mobile,2,0,False,referral,google_organic,16,referral > google_organic
+txn_000245,user_005070,session_009880,2024-12-10 10:05:46,2024-12-10,80.02,direct,mobile,3,0,False,social_facebook,direct,16,social_facebook > direct > direct
+txn_000246,user_004746,session_010041,2024-12-10 20:14:02,2024-12-10,123.84,google_organic,mobile,4,0,False,google_organic,google_organic,26,google_organic > google_organic > referral > google_organic
+txn_000247,user_004917,session_010050,2024-12-10 20:42:26,2024-12-10,82.02,email,mobile,1,0,False,email,email,0,email
+txn_000248,user_001888,session_010091,2024-12-11 09:17:31,2024-12-11,300.02,email,mobile,2,0,False,google_organic,email,6,google_organic > email
+txn_000249,user_001619,session_010122,2024-12-11 10:55:19,2024-12-11,144.03,google_organic,desktop,4,3,True,prospecting_native,google_organic,13,prospecting_native > prospecting_display > prospecting_native > google_organic
+txn_000250,user_001129,session_010192,2024-12-11 14:11:24,2024-12-11,76.14,google_organic,mobile,1,0,False,google_organic,google_organic,0,google_organic
+txn_000251,user_005882,session_010211,2024-12-11 15:44:13,2024-12-11,90.05,google_organic,desktop,5,2,True,direct,google_organic,4,direct > referral > retargeting_native > retargeting_display > google_organic
+txn_000252,user_005442,session_010232,2024-12-11 16:24:00,2024-12-11,120.64,google_organic,mobile,6,3,True,prospecting_display,google_organic,22,prospecting_display > referral > retargeting_video > google_organic > retargeting_native > google_organic
+txn_000253,user_004181,session_010242,2024-12-11 16:58:49,2024-12-11,149.68,direct,mobile,4,2,True,prospecting_video,direct,15,prospecting_video > direct > retargeting_video > direct
+txn_000254,user_001412,session_010356,2024-12-12 09:25:07,2024-12-12,177.36,google_organic,mobile,6,2,True,retargeting_display,google_organic,29,retargeting_display > direct > retargeting_native > direct > direct > google_organic
+txn_000255,user_003021,session_010377,2024-12-12 10:31:07,2024-12-12,86.71,direct,desktop,4,3,True,prospecting_native,direct,12,prospecting_native > prospecting_video > prospecting_display > direct
+txn_000256,user_004987,session_010522,2024-12-12 17:48:10,2024-12-12,124.51,direct,mobile,1,0,False,direct,direct,0,direct
+txn_000257,user_000803,session_010540,2024-12-12 18:47:22,2024-12-12,179.45,social_facebook,mobile,6,3,True,google_organic,social_facebook,27,google_organic > retargeting_display > retargeting_display > retargeting_video > direct > social_facebook
+txn_000258,user_001945,session_010552,2024-12-12 19:12:31,2024-12-12,166.22,google_organic,mobile,3,0,False,social_facebook,google_organic,28,social_facebook > social_facebook > google_organic
+txn_000259,user_002092,session_010613,2024-12-13 09:04:24,2024-12-13,70.29,direct,desktop,4,0,False,google_organic,direct,24,google_organic > direct > direct > direct
+txn_000260,user_004893,session_010639,2024-12-13 10:25:23,2024-12-13,127.78,direct,desktop,2,1,True,retargeting_display,direct,22,retargeting_display > direct
+txn_000261,user_005909,session_010656,2024-12-13 11:27:33,2024-12-13,152.34,direct,tablet,1,0,False,direct,direct,0,direct
+txn_000262,user_002220,session_010659,2024-12-13 11:31:27,2024-12-13,165.27,referral,mobile,4,3,True,prospecting_native,referral,12,prospecting_native > prospecting_video > prospecting_video > referral
+txn_000263,user_005431,session_010675,2024-12-13 12:20:59,2024-12-13,249.41,google_organic,mobile,3,0,False,social_facebook,google_organic,26,social_facebook > social_facebook > google_organic
+txn_000264,user_001842,session_010704,2024-12-13 14:06:58,2024-12-13,120.34,referral,desktop,3,1,True,social_facebook,referral,25,social_facebook > retargeting_display > referral
+txn_000265,user_001371,session_010733,2024-12-13 15:57:09,2024-12-13,126.75,direct,desktop,2,1,True,prospecting_display,direct,0,prospecting_display > direct
+txn_000266,user_005122,session_010758,2024-12-13 17:10:16,2024-12-13,248.33,social_facebook,mobile,1,0,False,social_facebook,social_facebook,0,social_facebook
+txn_000267,user_005747,session_010798,2024-12-13 19:39:19,2024-12-13,236.52,direct,desktop,2,1,True,prospecting_display,direct,3,prospecting_display > direct
+txn_000268,user_001444,session_010926,2024-12-14 12:14:06,2024-12-14,240.54,email,mobile,3,0,False,direct,email,11,direct > direct > email
+txn_000269,user_000982,session_010958,2024-12-14 13:56:03,2024-12-14,48.98,google_organic,tablet,4,2,True,retargeting_display,google_organic,27,retargeting_display > retargeting_display > google_organic > google_organic
+txn_000270,user_003264,session_011014,2024-12-14 16:56:26,2024-12-14,198.29,referral,desktop,2,0,False,direct,referral,3,direct > referral
+txn_000271,user_001928,session_011040,2024-12-14 19:04:23,2024-12-14,191.21,google_organic,desktop,3,2,True,prospecting_display,google_organic,1,prospecting_display > prospecting_video > google_organic
+txn_000272,user_004141,session_011049,2024-12-14 19:19:11,2024-12-14,519.42,google_organic,desktop,2,0,False,google_organic,google_organic,28,google_organic > google_organic
+txn_000273,user_003314,session_011052,2024-12-14 19:31:54,2024-12-14,28.52,google_organic,mobile,2,0,False,direct,google_organic,23,direct > google_organic
+txn_000274,user_001676,session_011233,2024-12-15 14:34:57,2024-12-15,342.66,google_organic,mobile,2,0,False,direct,google_organic,18,direct > google_organic
+txn_000275,user_000664,session_011243,2024-12-15 15:05:29,2024-12-15,90.14,direct,desktop,5,3,True,prospecting_video,direct,28,prospecting_video > google_organic > retargeting_native > retargeting_display > direct
+txn_000276,user_005056,session_011256,2024-12-15 15:44:16,2024-12-15,197.59,direct,mobile,4,2,True,prospecting_video,direct,6,prospecting_video > social_facebook > retargeting_display > direct
+txn_000277,user_003828,session_011347,2024-12-15 20:32:30,2024-12-15,112.11,direct,desktop,3,1,True,retargeting_display,direct,27,retargeting_display > referral > direct

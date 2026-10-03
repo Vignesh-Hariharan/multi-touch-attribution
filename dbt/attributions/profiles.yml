@@ -11,6 +11,11 @@ attributions:
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'COMPUTE_WH') }}"
       schema: analytics
       threads: 4
-      client_session_keep_alive: False
-      query_tag: dbt_attribution_analytics
+      client_session_keep_alive: false
+      query_tag: dbt_attribution
 
+    local:
+      type: duckdb
+      path: attribution.duckdb
+      schema: analytics
+      threads: 4
