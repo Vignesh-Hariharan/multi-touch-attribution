@@ -1,0 +1,31 @@
+pathway,pathway_length,conversion_count,total_revenue,avg_revenue,share_of_conversions
+direct,1,24,3305.17,137.7154,0.0866
+direct > direct,2,4,798.77,199.6925,0.0144
+direct > google_organic,2,5,676.9,135.38,0.0181
+direct > google_organic > direct,3,2,464.02,232.01,0.0072
+email,1,6,504.56,84.0933,0.0217
+google_organic,1,15,1697.75,113.1833,0.0542
+google_organic > direct,2,4,614.54,153.635,0.0144
+google_organic > google_organic,2,4,955.59,238.8975,0.0144
+google_organic > social_facebook,2,3,384.07,128.0233,0.0108
+prospecting_display > direct,2,5,672.93,134.586,0.0181
+prospecting_display > prospecting_display > direct,3,2,239.45,119.725,0.0072
+prospecting_display > prospecting_display > google_organic,3,2,234.47,117.235,0.0072
+prospecting_display > prospecting_video > google_organic,3,3,335.16,111.72,0.0108
+prospecting_display > referral,2,2,164.64,82.32,0.0072
+prospecting_native > direct,2,6,664.48,110.7467,0.0217
+prospecting_native > google_organic,2,2,488.09,244.045,0.0072
+prospecting_native > prospecting_display > social_facebook,3,2,169.29,84.645,0.0072
+prospecting_native > prospecting_native > direct,3,2,254.12,127.06,0.0072
+prospecting_native > prospecting_native > prospecting_native > direct,4,3,247.02,82.34,0.0108
+prospecting_native > referral,2,2,286.91,143.455,0.0072
+prospecting_video > prospecting_display > direct,3,4,299.47,74.8675,0.0144
+prospecting_video > prospecting_display > prospecting_native > direct,4,2,328.4,164.2,0.0072
+prospecting_video > prospecting_video > google_organic,3,3,511.67,170.5567,0.0108
+prospecting_video > referral,2,2,582.25,291.125,0.0072
+referral,1,4,584.95,146.2375,0.0144
+referral > google_organic,2,2,189.03,94.515,0.0072
+social_facebook,1,16,2872.44,179.5275,0.0578
+social_facebook > referral,2,2,248.53,124.265,0.0072
+social_facebook > social_facebook,2,2,177.41,88.705,0.0072
+social_facebook > social_facebook > google_organic,3,2,415.63,207.815,0.0072

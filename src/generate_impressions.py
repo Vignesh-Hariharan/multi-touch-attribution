@@ -1,231 +1,155 @@
 """
-Impression Generator
+Synthetic programmatic impressions for the site users the ad platform can reach.
 
-Generates synthetic programmatic ad impression data with realistic timing patterns.
-KEY: Prospecting ads appear EARLY (before first session), retargeting ads appear LATE.
-Prospecting ads fire before the first session, so first-touch and position-based
-credit them; last-touch often does not.
+Prospecting serves in the 14 days before a user's first site visit. Retargeting
+serves after the first visit and stops at the user's first purchase or 14 days
+after the visit, whichever is sooner. Every impression falls inside its
+campaign's flight dates. Attribution later keeps only viewable impressions, so
+these act as view-through touches; clicks are recorded but do not create sessions.
 """
 
 import argparse
-import uuid
 from datetime import timedelta
-from pathlib import Path
-from typing import List, Dict, Set
 
 import numpy as np
 import pandas as pd
 
 from config import get_config
 
+PROSPECTING_LOOKBACK = timedelta(days=14)
+RETARGETING_WINDOW = timedelta(days=14)
+RETARGETING_DELAY = timedelta(hours=1)
+PROSPECTING_IMPRESSIONS = (1, 6)
+RETARGETING_IMPRESSIONS = (1, 5)
+
+IMPRESSION_COLUMNS = [
+    "impression_id",
+    "impression_timestamp",
+    "user_pseudo_id",
+    "campaign_id",
+    "campaign_name",
+    "campaign_type",
+    "creative_format",
+    "publisher",
+    "is_viewable",
+    "has_click",
+    "device_category",
+]
+
 
 class ImpressionGenerator:
-    """Generate synthetic ad impression data with realistic user journey timing."""
-
     def __init__(self, config):
         self.config = config
-        np.random.seed(config.random_seed)
+        self.rng = np.random.default_rng([config.random_seed, 2])
 
-    def generate(self, events_df: pd.DataFrame, campaigns_df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Generate ad impressions with realistic timing patterns.
-        
-        Strategy:
-        - Select target users (USER_OVERLAP_PCT of total users)
-        - For new users (1 session): Show prospecting ads BEFORE first session
-        - For returning users (2+ sessions): Show retargeting ads AFTER first session
-        - This naturally creates early vs late touchpoint patterns
-        
-        Args:
-            events_df: GA4 events dataframe
-            campaigns_df: Campaigns dataframe
-            
-        Returns:
-            DataFrame with ad impressions
-        """
-        print(f" Generating {self.config.num_impressions:,} ad impressions...")
-        
-        # Get user first session times
-        user_sessions = self._analyze_user_sessions(events_df)
-        print(f"   Analyzed {len(user_sessions):,} users")
-        
-        # Select users to target (overlap percentage)
-        target_users = self._select_target_users(user_sessions)
-        print(f"   Selected {len(target_users):,} users to target ({self.config.user_overlap_pct:.0%} overlap)")
-        
-        # Generate impressions
-        impressions = self._generate_user_impressions(target_users, user_sessions, campaigns_df)
-        
-        impressions_df = pd.DataFrame(impressions)
-        impressions_df = impressions_df.sort_values("impression_timestamp").reset_index(drop=True)
-        
-        self._print_stats(impressions_df)
-        
-        return impressions_df
+    @staticmethod
+    def _user_activity(events: pd.DataFrame) -> pd.DataFrame:
+        events = events.assign(event_timestamp=pd.to_datetime(events["event_timestamp"]))
+        first_visit = (
+            events[events["event_name"] == "session_start"].groupby("user_pseudo_id")["event_timestamp"].min()
+        )
+        first_purchase = events[events["event_name"] == "purchase"].groupby("user_pseudo_id")["event_timestamp"].min()
+        device = events.groupby("user_pseudo_id")["device_category"].first()
+        return (
+            pd.DataFrame({"first_visit": first_visit, "device_category": device})
+            .join(first_purchase.rename("first_purchase"))
+            .sort_index()
+        )
 
-    def _analyze_user_sessions(self, events_df: pd.DataFrame) -> Dict[str, Dict]:
-        """Analyze user session patterns."""
-        user_data = {}
-        
-        for user_id in events_df["user_pseudo_id"].unique():
-            user_events = events_df[events_df["user_pseudo_id"] == user_id]
-            
-            # Get session starts only
-            session_starts = user_events[user_events["event_name"] == "session_start"]
-            
-            user_data[user_id] = {
-                "first_session": user_events["event_timestamp"].min(),
-                "last_session": user_events["event_timestamp"].max(),
-                "session_count": len(session_starts),
-                "has_purchased": (user_events["event_name"] == "purchase").any(),
-            }
-        
-        return user_data
-
-    def _select_target_users(self, user_sessions: Dict) -> Set[str]:
-        """Select users to show ads to based on overlap percentage."""
-        all_users = list(user_sessions.keys())
-        num_target = int(len(all_users) * self.config.user_overlap_pct)
-        target_users = set(np.random.choice(all_users, size=num_target, replace=False))
-        return target_users
-
-    def _generate_user_impressions(
-        self, 
-        target_users: Set[str], 
-        user_sessions: Dict, 
-        campaigns_df: pd.DataFrame
-    ) -> List[Dict]:
-        """Generate impressions for target users with realistic timing."""
-        impressions = []
-        impressions_per_user = self.config.num_impressions // len(target_users)
-        
-        for user_id in target_users:
-            user_info = user_sessions[user_id]
-            
-            # Determine campaign targeting
-            if user_info["session_count"] == 1:
-                # New user → Prospecting campaigns
-                campaign_type = "prospecting"
-                eligible_campaigns = campaigns_df[campaigns_df["campaign_type"] == "prospecting"]
-                num_imps = np.random.randint(3, 8)  # More prospecting impressions
-                
-            elif user_info["session_count"] >= 2 and not user_info["has_purchased"]:
-                # Returning non-purchaser → Retargeting campaigns
-                campaign_type = "retargeting"
-                eligible_campaigns = campaigns_df[campaigns_df["campaign_type"] == "retargeting"]
-                num_imps = np.random.randint(2, 5)
-                
-            else:
-                # Skip purchasers (no post-purchase ads for simplicity)
+    def _draw(self, campaigns: pd.DataFrame, earliest, latest, count_range):
+        """Draw impressions uniformly in [earliest, latest), clipped to each campaign's flight."""
+        draws = []
+        for _ in range(int(self.rng.integers(*count_range))):
+            campaign = campaigns.iloc[int(self.rng.integers(len(campaigns)))]
+            lo = max(earliest, campaign["flight_start"])
+            hi = min(latest, campaign["flight_end"])
+            if hi <= lo:
                 continue
-            
-            if len(eligible_campaigns) == 0:
-                continue
-            
-            # Generate impressions for this user
-            for _ in range(num_imps):
-                campaign = eligible_campaigns.sample(1).iloc[0]
-                
-                # CRITICAL: Timing logic that creates the attribution insight
-                if campaign_type == "prospecting":
-                    # Prospecting: BEFORE first session (awareness phase)
-                    # This makes them appear at POSITION 1 in attribution
-                    days_before = np.random.uniform(1, 14)
-                    impression_ts = user_info["first_session"] - timedelta(days=days_before)
-                else:
-                    # Retargeting: AFTER first session (consideration phase)  
-                    # This makes them appear at LATER positions
-                    days_after = np.random.uniform(1, 7)
-                    impression_ts = user_info["first_session"] + timedelta(days=days_after)
-                
-                # Add random hour/minute
-                impression_ts = impression_ts.replace(
-                    hour=np.random.randint(0, 24),
-                    minute=np.random.randint(0, 60),
-                    second=np.random.randint(0, 60)
+            offset = (hi - lo).total_seconds() * self.rng.random()
+            draws.append((lo + timedelta(seconds=int(offset)), campaign))
+        return draws
+
+    def generate(self, events: pd.DataFrame, campaigns: pd.DataFrame) -> pd.DataFrame:
+        campaigns = campaigns.assign(
+            flight_start=pd.to_datetime(campaigns["start_date"]),
+            flight_end=pd.to_datetime(campaigns["end_date"]) + timedelta(days=1),
+        )
+        by_type = {t: c.reset_index(drop=True) for t, c in campaigns.groupby("campaign_type")}
+        publishers = list(self.config.publisher_viewability)
+
+        users = self._user_activity(events)
+        n_reached = round(len(users) * self.config.ad_reach_pct)
+        reached = sorted(self.rng.choice(users.index.to_numpy(), size=n_reached, replace=False))
+
+        rows = []
+        for user_id in reached:
+            user = users.loc[user_id]
+            first_visit = user["first_visit"]
+
+            served = self._draw(
+                by_type["prospecting"],
+                first_visit - PROSPECTING_LOOKBACK,
+                first_visit,
+                PROSPECTING_IMPRESSIONS,
+            )
+            retarget_end = first_visit + RETARGETING_WINDOW
+            if pd.notna(user["first_purchase"]):
+                retarget_end = min(retarget_end, user["first_purchase"])
+            served += self._draw(
+                by_type["retargeting"],
+                first_visit + RETARGETING_DELAY,
+                retarget_end,
+                RETARGETING_IMPRESSIONS,
+            )
+
+            for ts, campaign in served:
+                publisher = publishers[int(self.rng.integers(len(publishers)))]
+                is_viewable = bool(self.rng.random() < self.config.publisher_viewability[publisher])
+                ctr = self.config.ctr[campaign["campaign_type"]][campaign["creative_format"]]
+                has_click = bool(is_viewable and self.rng.random() < ctr)
+                rows.append(
+                    {
+                        "impression_timestamp": ts,
+                        "user_pseudo_id": user_id,
+                        "campaign_id": campaign["campaign_id"],
+                        "campaign_name": campaign["campaign_name"],
+                        "campaign_type": campaign["campaign_type"],
+                        "creative_format": campaign["creative_format"],
+                        "publisher": publisher,
+                        "is_viewable": is_viewable,
+                        "has_click": has_click,
+                        "device_category": user["device_category"],
+                    }
                 )
-                
-                # Select publisher
-                publisher = np.random.choice(list(self.config.publishers.keys()))
-                publisher_config = self.config.publishers[publisher]
-                
-                # Viewability (binary based on publisher rate)
-                is_viewable = np.random.random() < publisher_config["viewability"]
-                
-                # Click (only if viewable)
-                has_click = False
-                if is_viewable:
-                    ctr = self.config.campaign_ctr[campaign_type][campaign["creative_format"]]
-                    has_click = np.random.random() < ctr
-                
-                # Device
-                device = np.random.choice(["mobile", "desktop", "tablet"], p=[0.60, 0.35, 0.05])
-                
-                impressions.append({
-                    "impression_id": str(uuid.uuid4()),
-                    "impression_timestamp": impression_ts,
-                    "user_pseudo_id": user_id,
-                    "campaign_id": campaign["campaign_id"],
-                    "campaign_name": campaign["campaign_name"],
-                    "campaign_type": campaign_type,
-                    "creative_format": campaign["creative_format"],
-                    "publisher": publisher,
-                    "is_viewable": is_viewable,
-                    "has_click": has_click,
-                    "device_category": device,
-                })
-        
-        return impressions
 
-    def _print_stats(self, impressions_df: pd.DataFrame):
-        """Print impression statistics."""
-        total = len(impressions_df)
-        print(f"   Generated {total:,} impressions")
-        
-        print(f"\n  Campaign Type Distribution:")
-        for ctype in ["prospecting", "retargeting"]:
-            count = len(impressions_df[impressions_df["campaign_type"] == ctype])
-            pct = count / total * 100
-            print(f"    - {ctype.capitalize()}: {count:,} ({pct:.1f}%)")
-        
-        print(f"\n  Creative Format Distribution:")
-        for fmt, count in impressions_df["creative_format"].value_counts().items():
-            pct = count / total * 100
-            print(f"    - {fmt.capitalize()}: {count:,} ({pct:.1f}%)")
-        
-        viewable = impressions_df["is_viewable"].sum()
-        viewable_rate = viewable / total * 100
-        print(f"\n  Viewability: {viewable:,} ({viewable_rate:.1f}%)")
-        
-        clicks = impressions_df["has_click"].sum()
-        ctr = clicks / viewable * 100 if viewable > 0 else 0
-        print(f"  Clicks: {clicks:,} (CTR: {ctr:.3f}%)")
-        
-        unique_users = impressions_df["user_pseudo_id"].nunique()
-        print(f"  Unique Users: {unique_users:,}")
+        df = pd.DataFrame(rows).sort_values(
+            ["impression_timestamp", "user_pseudo_id", "campaign_id"], kind="mergesort", ignore_index=True
+        )
+        df.insert(0, "impression_id", [f"imp_{i:07d}" for i in range(1, len(df) + 1)])
+        df = df[IMPRESSION_COLUMNS]
+
+        print(
+            f"Impressions: {len(df):,} for {df['user_pseudo_id'].nunique():,} users "
+            f"({df['campaign_type'].value_counts().to_dict()}), "
+            f"{df['is_viewable'].mean():.1%} viewable, {int(df['has_click'].sum())} clicks"
+        )
+        return df
 
 
 def main():
-    """Main execution function."""
-    parser = argparse.ArgumentParser(description="Generate synthetic ad impression data")
+    parser = argparse.ArgumentParser(description="Generate synthetic ad impressions")
     parser.add_argument("--output", type=str, help="Output CSV path")
     args = parser.parse_args()
 
     config = get_config()
+    events = pd.read_csv(config.data_dir / "ga4_events.csv")
+    campaigns = pd.read_csv(config.data_dir / "campaigns.csv")
 
-    events_df = pd.read_csv(config.data_dir / "ga4_events.csv", parse_dates=["event_timestamp"])
-    campaigns_df = pd.read_csv(config.data_dir / "campaigns.csv")
-
-    generator = ImpressionGenerator(config)
-    impressions_df = generator.generate(events_df, campaigns_df)
+    impressions = ImpressionGenerator(config).generate(events, campaigns)
 
     output_path = args.output or config.data_dir / "impressions.csv"
-    impressions_df.to_csv(output_path, index=False)
-    print(f"\n Saved {len(impressions_df):,} impressions to {output_path}")
-    
-    # Display sample
-    print("\n Sample impressions:")
-    print(impressions_df.head(10).to_string(index=False))
+    impressions.to_csv(output_path, index=False, date_format="%Y-%m-%d %H:%M:%S")
+    print(f"Wrote {output_path}")
 
 
 if __name__ == "__main__":

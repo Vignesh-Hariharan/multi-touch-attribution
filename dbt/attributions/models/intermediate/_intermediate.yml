@@ -2,7 +2,9 @@ version: 2
 
 models:
   - name: int_touchpoints
-    description: "Sessions and impressions before the attribution window. Grain is touchpoint_id."
+    description: >
+      Every touch a user can be credited for: one row per session (from its
+      session_start) and one per viewable impression. Grain is touchpoint_id.
     columns:
       - name: touchpoint_id
         tests:
@@ -14,14 +16,41 @@ models:
       - name: touchpoint_timestamp
         tests:
           - not_null
+      - name: channel
+        tests:
+          - accepted_values:
+              values:
+                - direct
+                - google_organic
+                - social_facebook
+                - referral
+                - email
+                - prospecting_display
+                - prospecting_video
+                - prospecting_native
+                - retargeting_display
+                - retargeting_video
+                - retargeting_native
+      - name: touchpoint_type
+        tests:
+          - accepted_values:
+              values: [session, impression]
 
   - name: int_attribution_window
-    description: "Touchpoints in the attribution window. Grain is conversion_id, touchpoint_id."
+    description: >
+      Touchpoints in the attribution window before each conversion, strictly
+      earlier than the purchase and at most attribution_window_days before it.
+      Ties on timestamp are broken by touchpoint_id. Grain is conversion_id,
+      touchpoint_id.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - conversion_id
             - touchpoint_id
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - conversion_id
+            - touchpoint_position
     columns:
       - name: conversion_id
         tests:

@@ -2,178 +2,171 @@
 
 [![CI](https://github.com/Vignesh-Hariharan/multi-touch-attribution/actions/workflows/ci.yml/badge.svg)](https://github.com/Vignesh-Hariharan/multi-touch-attribution/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](https://www.python.org/)
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB.svg)](https://www.python.org/)
 [![Snowflake](https://img.shields.io/badge/Snowflake-29B5E8.svg)](https://www.snowflake.com/)
 [![dbt](https://img.shields.io/badge/dbt-FF694B.svg)](https://www.getdbt.com/)
 [![Tableau Public](https://img.shields.io/badge/Tableau-Live%20Dashboard-E97627.svg)](https://public.tableau.com/views/Multi-TouchAttributionAnalysis/Multi-TouchAttributionAnalysis?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
 
-An attribution pipeline that compares four models (first-touch, last-touch, linear,
-position-based) on a synthetic marketing dataset. Python loads GA4-schema events and
-ad impressions into Snowflake; dbt builds staging → intermediate → marts and tests
-that attributed revenue sums back to actuals.
-
-## Dashboard
+Scores the same purchases under four attribution models (first-touch, last-touch,
+linear, position-based) to show how much the choice of rule moves credit between
+paid media and site channels. Python generates GA4-style events and programmatic
+ad impressions, loads them into Snowflake, and dbt builds and tests the marts that
+feed a Tableau Public dashboard.
 
 <p align="center">
   <a href="https://public.tableau.com/views/Multi-TouchAttributionAnalysis/Multi-TouchAttributionAnalysis?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link">
-    <img src="images/Multi-Touch Attribution Analysis.png" alt="Multi-Touch Attribution Dashboard" width="600"/>
+    <img src="images/dashboard.jpg" alt="Multi-touch attribution dashboard" width="800"/>
   </a>
 </p>
 
 [View the dashboard on Tableau Public](https://public.tableau.com/views/Multi-TouchAttributionAnalysis/Multi-TouchAttributionAnalysis?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
 
-The live viz compares last-touch vs position-based, the pair with a single gap %.
-First-touch and linear are in the mart.
+## What the run shows
 
-## The question
+277 purchases, $38,491.99 revenue, seed 42. 162 of those purchases (58%) had at
+least one viewable paid impression in the 30 days before checkout. How much of the
+revenue paid media gets depends entirely on the model:
 
-Last-touch gives 100% of conversion credit to the final touchpoint. That's the
-platform default, so channels that show up early get less. The pipeline scores
-the same conversions four ways so you can see where the models split, and so all
-four still add up to the same revenue.
+| Model | Paid media | Site visits | Paid share |
+|-------|-----------:|------------:|-----------:|
+| Last-touch | $0 | $38,492 | 0% |
+| Position-based (40/40/20) | $11,600 | $26,892 | 30% |
+| Linear | $13,691 | $24,801 | 36% |
+| First-touch | $20,603 | $17,889 | 54% |
 
-## What this run produces
+Last-touch gives paid media nothing because a purchase always happens inside a
+site session, and that session's `session_start` is always the last touch before
+checkout. Impressions are view-through: they come before the visit, never between
+the session start and the purchase. That's the structural blind spot of last-touch
+reporting, and it holds here by construction.
 
-Synthetic data, seed 42. That way dbt tests have a known answer and CI doesn't
-need a GA4 login. On real traffic the gaps move with journey length and paid mix.
+Position-based vs last-touch by channel:
 
-Of 220 conversions in this run, 37 (17%) had a paid prospecting touch before
-converting. Position-based vs last-touch:
+| Channel | Last-touch | Position-based | Difference |
+|---------|-----------:|---------------:|-----------:|
+| direct | $14,745 | $10,177 | -$4,568 |
+| google_organic | $11,081 | $7,609 | -$3,472 |
+| social_facebook | $5,819 | $5,035 | -$784 |
+| prospecting_video | $0 | $4,118 | +$4,118 |
+| prospecting_display | $0 | $3,182 | +$3,182 |
+| prospecting_native | $0 | $3,107 | +$3,107 |
+| referral | $4,744 | $2,697 | -$2,047 |
+| email | $2,103 | $1,374 | -$728 |
+| retargeting_display | $0 | $516 | +$516 |
+| retargeting_video | $0 | $356 | +$356 |
+| retargeting_native | $0 | $321 | +$321 |
 
-| Channel | Last-touch | Position-based | Gap |
-|---------|-----------:|---------------:|----:|
-| prospecting_display | $575 | $1,666 | +190% |
-| prospecting_native | $1,778 | $3,677 | +107% |
-| prospecting_video | $3,069 | $3,135 | +2% |
-| email | $3,381 | $3,979 | +18% |
-| direct | $20,805 | $20,460 | -2% |
-| social_facebook | $6,806 | $6,516 | -4% |
-| google_organic | $16,273 | $14,129 | -13% |
-| referral | $5,213 | $4,338 | -17% |
+Retargeting stays small under every model. It only serves between a user's first
+visit and first purchase, so it's rarely first and never last, and position-based
+gives middle touches 20% between them.
 
-Display's +190% comes from this generator (17% paid mix, 1.9 average touches,
-40/40/20). Don't read it as a live-campaign number. Queries that rebuild the
-table are in `dbt/attributions/analyses/`.
+### What this doesn't show
 
-## Architecture
+The data is synthetic, and in the generator ads have no effect on whether
+someone buys: purchase probability is the same with or without exposure. All
+four models still hand paid media credit, between $0 and $20.6K of it. Rule-based
+attribution splits credit across whatever touches happened; it can't say whether
+a channel caused the sale. That needs a holdout or geo test. The useful output
+here is the range, and knowing which assumption produces which end of it.
+
+## Pipeline
 
 ```
-GA4 Events (synthetic)          Programmatic Ads (simulated)
-  seed=42, 220 conversions        12 campaigns
-         |                                    |
-         +-------------> Python <-------------+
-                           |
-                      CSV files (data/)
-                           |
-                           v
-                  Snowflake raw schema (3 tables)
-                           |
-                           v
-              dbt: staging (3) -> intermediate (2) -> marts (2)
-                           |
-                           v
-           Snowflake analytics schema
-         (fct_attribution, fct_pathways)
-                           |
-              +------------+------------+
-              v                         v
-     Attribution models          Custom SQL tests
+src/generate_*.py ──> data/*.csv ──> Snowflake raw ──> dbt (staging -> intermediate -> marts) ──> export/*.csv ──> Tableau
+                                 └─> DuckDB (CI) ───┘
 ```
 
-Stack: Python 3.10+, Snowflake, dbt 1.7, pandas, NumPy.
+- **Generators** (`src/`): 6,000 users, 11,379 sessions, 53,871 events, 19,455
+  impressions. All randomness comes from one seeded NumPy generator per file, so
+  the same seed and pinned versions give byte-identical CSVs.
+- **Load** (`src/load_snowflake.py`): runs `sql/snowflake_ddl.sql`, checks each
+  CSV header against its table, then `PUT` + `COPY INTO`. It fails if the loaded
+  row count differs from the file.
+- **dbt** (`dbt/attributions/`): staging casts the raw VARCHAR columns;
+  `int_touchpoints` unions sessions and viewable impressions; `int_attribution_window`
+  keeps touches in the 30 days before each purchase and orders them.
+- **Marts**:
+  - `fct_attribution`: credit per touchpoint under all four models
+    (conversion x touchpoint grain)
+  - `fct_conversions`: one row per purchase with its path summary; revenue KPIs
+    come from here, never from `fct_attribution`, where revenue repeats per touch
+  - `agg_channel_attribution`: one row per channel, all four models side by side
+  - `fct_pathways`: channel sequences that converted at least twice
+- **Export** (`src/export_marts.py`): Tableau Public can't connect to Snowflake,
+  so the three reporting marts are written to `export/` from Snowflake and
+  committed.
 
-## Setup
+## Tests
+
+`dbt build` runs 49 tests alongside the models. The ones that guard the numbers:
+
+- each model's credit sums to the conversion's revenue (`attribution_sum_check`)
+- every purchase reaches `fct_attribution` (`every_conversion_attributed`)
+- channel totals under each model equal total revenue (`channel_totals_match_revenue`)
+- no impression falls outside its campaign's flight (`impressions_within_campaign_flight`)
+- grain checks on every model, accepted values on channels and event names
+
+`pytest tests` covers the generators: identical output under different
+`PYTHONHASHSEED` values, every session opening with `session_start`, purchases
+following a cart add and checkout in the same session, one device per user,
+prospecting before the first visit, and retargeting stopping at the first purchase.
+
+CI runs the generators, `dbt build` against DuckDB, then checks that DuckDB's
+marts match the committed Snowflake exports within a cent.
+
+## Running it
 
 ```bash
-git clone https://github.com/Vignesh-Hariharan/multi-touch-attribution.git
-cd multi-touch-attribution
-
-python -m venv venv
-source venv/bin/activate          # Windows: venv\Scripts\activate
+python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
-cp .env.sample .env               # add your Snowflake credentials
-
-# generate the synthetic data
 python src/generate_ga4.py
 python src/generate_campaigns.py
 python src/generate_impressions.py
+```
 
-# load and transform
-python src/load_snowflake.py
+Locally, without Snowflake:
+
+```bash
 cd dbt/attributions
 dbt deps
-dbt run --profiles-dir .
-dbt test --profiles-dir .
+dbt build --profiles-dir . --target local
 ```
 
-## Project structure
+On Snowflake (fill in `.env` from `.env.sample` first):
 
-```
-multi-touch-attribution/
-├── src/                          # data generation + Snowflake load
-│   ├── config.py
-│   ├── generate_ga4.py
-│   ├── generate_campaigns.py
-│   ├── generate_impressions.py
-│   └── load_snowflake.py
-├── dbt/attributions/
-│   ├── models/
-│   │   ├── staging/              # cleaning
-│   │   ├── intermediate/         # journey construction
-│   │   └── marts/                # fct_attribution, fct_pathways
-│   ├── tests/                    # custom SQL tests
-│   └── analyses/                 # validation queries
-├── sql/snowflake_ddl.sql
-├── data/                         # generated CSVs (git-ignored)
-└── tests/                        # Python unit tests
+```bash
+python src/load_snowflake.py
+cd dbt/attributions
+set -a && source ../../.env && set +a
+dbt deps
+dbt build --profiles-dir . --target dev
+cd ../..
+python src/export_marts.py --target dev
 ```
 
 ## The four models
 
-All four are implemented in [`fct_attribution.sql`](dbt/attributions/models/marts/fct_attribution.sql).
+All four are in [`fct_attribution.sql`](dbt/attributions/models/marts/fct_attribution.sql).
 
-- **First touch:** 100% to the first touchpoint. `WHEN touchpoint_position = 1 THEN revenue ELSE 0`
-- **Last touch:** 100% to the last touchpoint; the platform default. `WHEN touchpoint_position = total_touchpoints THEN revenue ELSE 0`
-- **Linear:** equal credit across touchpoints. `revenue / total_touchpoints`
-- **Position-based (U-shaped):** 40% first, 40% last, 20% split across the middle, with edge-case handling for single- and two-touch journeys.
+| First-touch | Last-touch | Linear | Position-based |
+|:-:|:-:|:-:|:-:|
+| <img src="images/first-touch-attribution.png" width="180"/> | <img src="images/last-touch-attribution.png" width="180"/> | <img src="images/linear-attribution.png" width="180"/> | <img src="images/position-based-attribution.png" width="180"/> |
 
-Model diagrams adapted from [Roketto's visual guide to attribution models](https://www.helloroketto.com/articles/a-visual-guide-to-marketing-attribution-models).
+- **First-touch:** all credit to the earliest touch in the window.
+- **Last-touch:** all credit to the touch right before the purchase. Impressions
+  count as touches, so this is last-touch rather than last-click.
+- **Linear:** equal split across every touch.
+- **Position-based:** 40% first, 40% last, 20% shared by the middle. One touch
+  takes everything; two touches split 50/50.
 
-## Data generation
+Diagrams adapted from [Roketto's visual guide to attribution models](https://www.helloroketto.com/articles/a-visual-guide-to-marketing-attribution-models).
 
-The synthetic dataset is built to resemble a programmatic marketing funnel:
+## Docs
 
-- 220 conversions (~$58K revenue) across 5,833 users (~3.8% conversion rate)
-- 37 converters (17%) exposed to paid prospecting before converting
-- Average journey length 1.9 touchpoints; 47% multi-touch, 53% single-touch
-- Prospecting ads fire 1–14 days before the first session (cold-audience timing)
-- 60% of web users are also ad-targeted, in the range of real programmatic match rates
-
-Paid mix here is 17% of conversions, the low end of the 15–60% range campaigns
-actually run. Turn that up and the gaps get bigger. That's the generator.
-
-## Validation
-
-```bash
-cd dbt/attributions
-dbt test --profiles-dir .
-```
-
-Tests check that attributed revenue sums back to actual revenue per conversion, that there
-are no nulls or type violations, and that row counts and freshness match expectations.
-
-## Documentation
-
-- `DATA_DICTIONARY.md`: table and column definitions
-- `ASSUMPTIONS.md`: data-generation and modeling assumptions
-- dbt docs: `dbt docs generate --profiles-dir .` then `dbt docs serve`
-
-## References
-
-- [Google Analytics attribution models](https://support.google.com/analytics/answer/10596866)
-- [Google Ads: data-driven attribution](https://support.google.com/google-ads/answer/6394265)
-- [dbt best practices](https://docs.getdbt.com/guides/best-practices)
+- [`ASSUMPTIONS.md`](ASSUMPTIONS.md): generator parameters and their limits
+- [`DATA_DICTIONARY.md`](DATA_DICTIONARY.md): tables and columns
+- [`docs/tableau_build_spec.md`](docs/tableau_build_spec.md): how the dashboard is built from `export/`
 
 ---
 

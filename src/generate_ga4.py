@@ -1,188 +1,199 @@
 """
-GA4 Synthetic Event Generator
+Synthetic GA4-style event export: users, sessions, and ordered in-session events.
 
-Generates synthetic GA4 e-commerce event data with realistic user journey patterns:
-sessions, page views, channel attribution, and purchase events.
+user_pseudo_id is a browser cookie in GA4, so device is fixed per user. Every
+session opens with session_start, and the purchase funnel is nested
+(add_to_cart -> begin_checkout -> purchase), so a purchase always follows a
+session_start, a cart add and a checkout in the same session.
 """
 
 import argparse
-import uuid
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import List, Dict
+from datetime import timedelta
 
 import numpy as np
 import pandas as pd
-from faker import Faker
 
 from config import get_config
 
+SESSIONS_PER_USER = ([1, 2, 3, 4, 5], [0.50, 0.25, 0.15, 0.07, 0.03])
+MIN_SESSION_GAP = timedelta(hours=1)
+MAX_SESSION_LENGTH = timedelta(minutes=40)
+DEVICE_MIX = {"mobile": 0.60, "desktop": 0.35, "tablet": 0.05}
+
+P_ADD_TO_CART = 0.15
+P_CHECKOUT_GIVEN_CART = 0.50
+P_PURCHASE_GIVEN_CHECKOUT = 0.35
+
+ORDER_VALUE_MEDIAN = 110.0
+ORDER_VALUE_SIGMA = 0.6
+ORDER_VALUE_BOUNDS = (15.0, 800.0)
+
+REFERRAL_DOMAINS = ["reddit.com", "slickdeals.net", "medium.com", "trustpilot.com"]
+
+BASE_URL = "https://example-shop.com"
+PAGES = ["/", "/products", "/categories", "/products/item-1", "/products/item-2", "/blog"]
+
+EVENT_COLUMNS = [
+    "event_timestamp",
+    "event_date",
+    "event_name",
+    "user_pseudo_id",
+    "session_id",
+    "source",
+    "medium",
+    "campaign",
+    "page_location",
+    "device_category",
+    "country",
+    "revenue",
+    "transaction_id",
+]
+
 
 class GA4EventGenerator:
-    """Generate synthetic GA4 event data with realistic patterns."""
-
     def __init__(self, config):
         self.config = config
-        np.random.seed(config.random_seed)
-        self.fake = Faker()
-        Faker.seed(config.random_seed)
+        self.rng = np.random.default_rng([config.random_seed, 1])
 
-    def generate_users(self) -> List[str]:
-        """Generate user pseudo IDs."""
-        num_users = int(self.config.num_events / 6)  # ~6 events per user on average
-        return [f"user_{str(i).zfill(6)}" for i in range(1, num_users + 1)]
+    def generate_users(self) -> pd.DataFrame:
+        n = self.config.num_users
+        devices = self.rng.choice(list(DEVICE_MIX), size=n, p=list(DEVICE_MIX.values()))
+        return pd.DataFrame(
+            {
+                "user_pseudo_id": [f"user_{i:06d}" for i in range(1, n + 1)],
+                "device_category": devices,
+            }
+        )
 
-    def generate_sessions(self, users: List[str]) -> pd.DataFrame:
-        """Generate session data for users."""
-        sessions = []
-        session_id = 1
+    def generate_sessions(self, users: pd.DataFrame) -> pd.DataFrame:
+        counts, probs = SESSIONS_PER_USER
+        channels = list(self.config.channel_mix)
+        channel_p = list(self.config.channel_mix.values())
+        rows = []
 
-        for user_id in users:
-            # Number of sessions per user (1-5, weighted toward 1-2)
-            num_sessions = np.random.choice([1, 2, 3, 4, 5], p=[0.50, 0.25, 0.15, 0.07, 0.03])
-
-            for _ in range(num_sessions):
-                # Random timestamp within date range
-                days_offset = np.random.randint(0, self.config.date_range_days)
-                hour = np.random.randint(8, 22)  # Business hours weighted
-                minute = np.random.randint(0, 60)
-                
-                session_start = self.config.start_datetime + timedelta(
-                    days=days_offset, hours=hour, minutes=minute
+        for user in users.itertuples(index=False):
+            n_sessions = self.rng.choice(counts, p=probs)
+            starts = sorted(
+                self.config.start_datetime
+                + timedelta(
+                    days=int(self.rng.integers(0, self.config.date_range_days)),
+                    hours=int(self.rng.integers(8, 22)),
+                    minutes=int(self.rng.integers(0, 60)),
+                    seconds=int(self.rng.integers(0, 60)),
+                )
+                for _ in range(n_sessions)
+            )
+            for i in range(1, len(starts)):
+                starts[i] = max(starts[i], starts[i - 1] + MIN_SESSION_GAP)
+            latest_start = self.config.end_datetime - MAX_SESSION_LENGTH
+            for start in (s for s in starts if s <= latest_start):
+                rows.append(
+                    {
+                        "user_pseudo_id": user.user_pseudo_id,
+                        "device_category": user.device_category,
+                        "session_start": start,
+                        "channel": self.rng.choice(channels, p=channel_p),
+                    }
                 )
 
-                # Assign channel (source/medium)
-                channel = np.random.choice(
-                    list(self.config.channel_distribution.keys()),
-                    p=list(self.config.channel_distribution.values())
-                )
+        sessions = pd.DataFrame(rows).sort_values(["session_start", "user_pseudo_id"], ignore_index=True)
+        sessions["session_id"] = [f"session_{i:06d}" for i in range(1, len(sessions) + 1)]
+        return sessions
 
-                sessions.append({
-                    "user_pseudo_id": user_id,
-                    "session_id": f"session_{session_id}",
-                    "session_start": session_start,
-                    "channel": channel,
-                })
-                session_id += 1
+    def _source_medium(self, channel: str):
+        if channel == "direct":
+            return "(direct)", "(none)", "(not set)"
+        if channel == "organic_search":
+            return "google", "organic", "(not set)"
+        if channel == "social":
+            return "facebook", "social", "(not set)"
+        if channel == "referral":
+            return self.rng.choice(REFERRAL_DOMAINS), "referral", "(not set)"
+        if channel == "email":
+            return "newsletter", "email", "monthly_newsletter"
+        raise ValueError(f"Unknown channel: {channel}")
 
-        return pd.DataFrame(sessions)
+    def _order_value(self) -> float:
+        value = self.rng.lognormal(np.log(ORDER_VALUE_MEDIAN), ORDER_VALUE_SIGMA)
+        return round(float(np.clip(value, *ORDER_VALUE_BOUNDS)), 2)
 
     def generate_events(self, sessions: pd.DataFrame) -> pd.DataFrame:
-        """Generate events from sessions."""
         events = []
-        event_types = {
-            "session_start": 1.0,
-            "page_view": 0.8,
-            "scroll": 0.5,
-            "add_to_cart": 0.15,
-            "begin_checkout": 0.08,
-            "purchase": 0.025,  # ~2.5% conversion rate
-        }
+        txn_counter = 0
 
-        for _, session in sessions.iterrows():
-            session_duration_minutes = np.random.randint(1, 30)
-            
-            for event_type, probability in event_types.items():
-                if np.random.random() < probability:
-                    # Event timestamp within session duration
-                    minutes_offset = np.random.randint(0, session_duration_minutes)
-                    event_timestamp = session["session_start"] + timedelta(minutes=minutes_offset)
+        for s in sessions.itertuples(index=False):
+            source, medium, campaign = self._source_medium(s.channel)
+            ts = s.session_start
+            session_events = [("session_start", ts, "/")]
 
-                    # Parse channel to source/medium
-                    if session["channel"] == "direct":
-                        source, medium = "direct", "(none)"
-                    elif session["channel"] == "organic_search":
-                        source, medium = "google", "organic"
-                    elif session["channel"] == "social":
-                        source, medium = "facebook", "social"
-                    elif session["channel"] == "referral":
-                        source, medium = self.fake.domain_name(), "referral"
-                    elif session["channel"] == "email":
-                        source, medium = "newsletter", "email"
-                    else:
-                        source, medium = "unknown", "unknown"
+            for _ in range(int(self.rng.integers(1, 6))):
+                ts += timedelta(seconds=int(self.rng.integers(10, 180)))
+                session_events.append(("page_view", ts, self.rng.choice(PAGES)))
+            if self.rng.random() < 0.5:
+                ts += timedelta(seconds=int(self.rng.integers(5, 60)))
+                session_events.append(("scroll", ts, session_events[-1][2]))
 
-                    event_data = {
-                        "event_timestamp": event_timestamp,
-                        "event_date": event_timestamp.strftime("%Y%m%d"),
-                        "event_name": event_type,
-                        "user_pseudo_id": session["user_pseudo_id"],
-                        "session_id": session["session_id"],
+            purchase = None
+            if self.rng.random() < P_ADD_TO_CART:
+                ts += timedelta(seconds=int(self.rng.integers(20, 240)))
+                session_events.append(("add_to_cart", ts, "/products/item-1"))
+                if self.rng.random() < P_CHECKOUT_GIVEN_CART:
+                    ts += timedelta(seconds=int(self.rng.integers(30, 300)))
+                    session_events.append(("begin_checkout", ts, "/checkout"))
+                    if self.rng.random() < P_PURCHASE_GIVEN_CHECKOUT:
+                        ts += timedelta(seconds=int(self.rng.integers(60, 600)))
+                        txn_counter += 1
+                        purchase = (f"txn_{txn_counter:06d}", self._order_value())
+                        session_events.append(("purchase", ts, "/checkout/confirmation"))
+
+            for name, event_ts, page in session_events:
+                is_purchase = name == "purchase"
+                events.append(
+                    {
+                        "event_timestamp": event_ts,
+                        "event_date": event_ts.strftime("%Y%m%d"),
+                        "event_name": name,
+                        "user_pseudo_id": s.user_pseudo_id,
+                        "session_id": s.session_id,
                         "source": source,
                         "medium": medium,
-                        "campaign": "(not set)" if session["channel"] != "email" else "monthly_newsletter",
-                        "page_location": self._generate_page_url(event_type),
-                        "device_category": np.random.choice(
-                            ["mobile", "desktop", "tablet"], p=[0.60, 0.35, 0.05]
-                        ),
+                        "campaign": campaign,
+                        "page_location": f"{BASE_URL}{page}",
+                        "device_category": s.device_category,
                         "country": "United States",
-                        "revenue": 0.0,
-                        "transaction_id": None,
+                        "revenue": purchase[1] if is_purchase else 0.0,
+                        "transaction_id": purchase[0] if is_purchase else None,
                     }
+                )
 
-                    # Add revenue for purchase events
-                    if event_type == "purchase":
-                        event_data["revenue"] = round(np.random.uniform(25, 500), 2)
-                        event_data["transaction_id"] = f"txn_{uuid.uuid4().hex[:12]}"
-
-                    events.append(event_data)
-
-        return pd.DataFrame(events).sort_values("event_timestamp").reset_index(drop=True)
-
-    def _generate_page_url(self, event_type: str) -> str:
-        """Generate realistic page URLs based on event type."""
-        base_url = "https://example-shop.com"
-        
-        pages = {
-            "session_start": ["/", "/home"],
-            "page_view": ["/products", "/categories", "/about", "/contact"],
-            "scroll": ["/products", "/blog"],
-            "add_to_cart": ["/products/item-1", "/products/item-2", "/products/item-3"],
-            "begin_checkout": ["/checkout"],
-            "purchase": ["/checkout/confirmation"],
-        }
-        
-        page = np.random.choice(pages.get(event_type, ["/"]))
-        return f"{base_url}{page}"
+        df = pd.DataFrame(events, columns=EVENT_COLUMNS)
+        return df.sort_values(["event_timestamp", "session_id"], kind="mergesort", ignore_index=True)
 
     def generate(self) -> pd.DataFrame:
-        """Generate complete GA4 event dataset."""
-        print(f" Generating {self.config.num_events:,} GA4 events...")
-        
         users = self.generate_users()
-        print(f"   Generated {len(users):,} users")
-        
         sessions = self.generate_sessions(users)
-        print(f"   Generated {len(sessions):,} sessions")
-        
         events = self.generate_events(sessions)
-        print(f"   Generated {len(events):,} events")
-        
+
         purchases = events[events["event_name"] == "purchase"]
-        total_revenue = purchases["revenue"].sum()
-        print(f"   Generated {len(purchases):,} purchases (${total_revenue:,.2f} revenue)")
-        
+        print(
+            f"GA4: {len(users):,} users, {len(sessions):,} sessions, {len(events):,} events, "
+            f"{len(purchases):,} purchases (${purchases['revenue'].sum():,.2f})"
+        )
         return events
 
 
 def main():
-    """Main execution function."""
-    parser = argparse.ArgumentParser(description="Generate synthetic GA4 event data")
+    parser = argparse.ArgumentParser(description="Generate synthetic GA4 events")
     parser.add_argument("--output", type=str, help="Output CSV path")
     args = parser.parse_args()
 
     config = get_config()
+    events = GA4EventGenerator(config).generate()
 
-    generator = GA4EventGenerator(config)
-    events_df = generator.generate()
-
+    config.data_dir.mkdir(exist_ok=True)
     output_path = args.output or config.data_dir / "ga4_events.csv"
-    events_df.to_csv(output_path, index=False)
-    print(f"\n Saved {len(events_df):,} events to {output_path}")
-    
-    # Display sample
-    print("\n Sample data:")
-    print(events_df.head(10).to_string(index=False))
+    events.to_csv(output_path, index=False, date_format="%Y-%m-%d %H:%M:%S")
+    print(f"Wrote {output_path}")
 
 
 if __name__ == "__main__":

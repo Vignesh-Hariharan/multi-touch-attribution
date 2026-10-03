@@ -1,142 +1,67 @@
-# Project Assumptions
+# Assumptions
 
-## Data Generation Assumptions
+Everything below is a parameter of the generator, chosen to look like a mid-size
+B2C store running programmatic campaigns. None of it is fitted to real data. The
+constants live at the top of `src/generate_ga4.py` and `src/generate_impressions.py`
+and in `src/config.py`.
 
-### User Behavior
-- Users have 1-5 sessions on average, with most having 1-2 sessions
-- **Conversion rate is approximately 3-4%** of total users (220 conversions / 5,833 users = 3.8%) — see [Shopify](https://www.shopify.com/blog/ecommerce-conversion-rate) benchmarks
-- Sessions occur during business hours (8am-10pm) weighted toward evening
-- Session duration varies from 2-30 minutes
-- Users interact with 3-8 pages per session
+## Site traffic (`generate_ga4.py`)
 
-### Marketing Touchpoints
-- **60% of web users are exposed to paid advertising** (realistic programmatic match rates due to Safari ITP/Firefox tracking protection)
-- **Prospecting campaigns target cold audiences 1-14 days before their first website visit** — based on [Google Ads](https://support.google.com/google-ads/answer/3419241) 30-day view-through window
-- Ad impressions are predominantly prospecting-focused (awareness-stage campaigns)
-- **67% of ad impressions are viewable** — per [MRC standards](https://mediaratingcouncil.org/) (50% minimum) and IAS industry reports (66-68% average)
-- **Click-through rate is approximately 0.1-1.4%** depending on format — [Google Display](https://support.google.com/google-ads/answer/2615875) (0.1%), [YouTube](https://support.google.com/google-ads/answer/2375464) (1.4%)
+- **Window:** 2024-11-01 to 2024-12-15. Sessions start between 08:00 and 21:59 on a
+  uniformly random day. No weekly pattern and no Black Friday spike.
+- **Users:** 6,000. `user_pseudo_id` is a browser cookie in GA4, so each user keeps
+  one device: mobile 60%, desktop 35%, tablet 5%.
+- **Sessions per user:** 1 to 5, weighted 50/25/15/7/3%. A user's sessions are at
+  least an hour apart, so they never overlap.
+- **Channel per session:** direct 40%, organic search 30%, social 15%, referral 10%,
+  email 5%, drawn independently for each session.
+- **In-session events:** `session_start`, then 1 to 5 page views and an optional
+  scroll. The funnel is nested: add to cart 15% of sessions, checkout 50% of carts,
+  purchase 35% of checkouts. That's about 2.6% of sessions in expectation; this run
+  converts 2.43%.
+- **Order value:** lognormal with a $110 median, clipped to $15 to $800. This run's
+  mean is $138.96.
 
-### Campaign Structure
-- 12 campaigns total across three creative formats: display, video, native
-- Campaign data includes both prospecting and retargeting types for completeness
-- Campaigns run for the full date range (Nov 1 - Dec 15, 2024)
-- Daily budgets vary by format: display ($500-750), video ($1200-1800), native ($800-1200)
-- **Analysis Focus**: This project analyzes prospecting campaigns vs organic/direct channels
+## Ad impressions (`generate_impressions.py`)
 
-## Attribution Assumptions
+- **Reach:** a random 60% of site users can be matched by the ad platform. Nobody
+  outside the site's users appears in the impression log.
+- **Prospecting:** 1 to 5 impressions per reached user in the 14 days before their
+  first visit. Nothing serves before the flight starts on Nov 1, so users who first
+  visit in the opening days get a shorter prospecting window, or none.
+- **Retargeting:** 1 to 4 impressions from an hour after the first visit until the
+  first purchase or 14 days after the visit, whichever comes first.
+- **Viewability:** set per publisher, 58% to 75%, about 68% overall. Only viewable
+  impressions become touchpoints. Under the MRC standard an impression counts as
+  viewable when half its pixels are on screen for one continuous second, or two
+  seconds for video.
+- **Clicks:** viewable impressions only. Rates are 0.10% for prospecting display,
+  0.28% native and 1.40% video, doubled for retargeting. Clicks are recorded but
+  don't create sessions.
 
-### Attribution Window
-- 30-day lookback window from conversion
-- Only touchpoints before conversion are included
-- No post-conversion touchpoints considered
+## Attribution (`dbt/attributions`)
 
-### Attribution Models
-- **First Touch**: Assumes first interaction drives all value
-- **Last Touch**: Assumes final interaction drives all value (industry baseline)
-- **Linear**: Assumes equal contribution from all touchpoints
-- **Position-Based (U-Shaped)**: 40% first, 40% last, 20% middle (assumes awareness and closing moments most important)
+- 30-day lookback (`attribution_window_days`). A touch has to be strictly earlier
+  than the purchase.
+- A touchpoint is a session (timestamped at its `session_start`) or a viewable
+  impression. Touches at the same second are ordered by `touchpoint_id`.
+- Position-based is 40/40/20. One touch takes 100%; two touches split 50/50.
+- Each purchase is attributed separately. Four users bought twice, so a touch can
+  sit in the path of both of their purchases.
 
-### Channel Classification
-- Direct traffic: medium = '(none)'
-- Organic search: medium = 'organic', source = search engine
-- Social: medium = 'social', source = social platform
-- Email: medium = 'email'
-- Referral: medium = 'referral'
-- Paid ads: campaign_type + creative_format (e.g., prospecting_display)
+## Limitations
 
-## Technical Assumptions
-
-### Data Quality
-- All timestamps are valid and in chronological order
-- User IDs are consistent across sessions and impressions
-- Revenue values are positive for all conversions
-- No duplicate transaction IDs
-
-### Snowflake Environment
-- SYSADMIN role owns the database objects and has the grants issued in sql/snowflake_ddl.sql
-- COMPUTE_WH warehouse is available and running
-- Database can be dropped and recreated cleanly
-- X-Small warehouse is sufficient for this data volume
-
-### dbt Assumptions
-- dbt 1.7+ is compatible with Snowflake adapter
-- Views are sufficient for staging/intermediate layers
-- Tables are needed for final marts (query performance)
-- Tests run after model builds
-
-## Business Assumptions
-
-### Marketing Strategy
-- Prospecting campaigns focus on awareness and new customer acquisition
-- Analysis compares last-touch vs position-based credit on early-stage paid media
-- Multi-touch journeys occur in 47% of conversions (average 1.9 touchpoints overall)
-- Display ads drive awareness even if they don't directly lead to clicks
-
-### Analysis Scope
-- **Primary Focus**: Paid prospecting campaigns vs organic/direct channels
-- **Key Question**: How much credit should awareness-stage paid media receive?
-- Analysis timeframe is 45 days (sufficient for attribution analysis)
-- B2C e-commerce context (single purchase per transaction)
-- 17% of conversions include paid prospecting touchpoints (conservative paid media strategy)
-- No consideration of offline touchpoints (TV, radio, direct mail)
-
-## Data Source & Methodology
-
-This project uses **synthetic data** generated to realistically simulate GA4 web analytics and programmatic advertising patterns. This approach is necessary because:
-
-- Real GA4 data contains proprietary customer information protected by privacy regulations (GDPR, CCPA)
-- Programmatic ad platform data (DV360, Trade Desk) requires client authorization and cannot be publicly shared
-- Marketing data from employers is confidential and subject to non-disclosure agreements
-- Public portfolio projects require reproducible, shareable datasets that don't expose business-sensitive information
-
-The generator follows common e-commerce and programmatic patterns so the pipeline
-is runnable without anyone's production data. The gap sizes are from this seed,
-not from live campaigns.
-
-## Research Sources
-
-All parameters are based on publicly available industry benchmarks:
-
-### E-commerce Metrics
-- **Conversion Rate (2.5%):** [Shopify E-commerce Benchmarks](https://www.shopify.com/blog/ecommerce-conversion-rate) (2-4% typical), [Baymard Institute Cart Abandonment](https://baymard.com/lists/cart-abandonment-rate) (3.4% average)
-- **Average Order Value ($25-$500):** [Statista E-commerce Statistics](https://www.statista.com/topics/871/online-shopping/) ($100-$200 typical range)
-
-### Programmatic Advertising
-- **Cookie Match Rate (60%):** Industry reports show 50-70% match rates due to Safari ITP and Firefox tracking protection
-- **Display CTR (0.10%):** [Google Ads Benchmarks](https://support.google.com/google-ads/answer/2615875) (0.05-0.15% for cold audiences)
-- **Video CTR (1.40%):** [YouTube TrueView Benchmarks](https://support.google.com/google-ads/answer/2375464) (1-2% typical)
-- **Native CTR (0.28%):** Outbrain and Taboola platform benchmarks (0.2-0.4%)
-- **Retargeting Lift (2x):** Industry consensus that retargeting outperforms prospecting 2-3x
-
-### Ad Quality Standards
-- **Viewability (67%):** [MRC Viewability Standard](https://mediaratingcouncil.org/) (50% minimum threshold), IAS Media Quality Reports (66-68% industry average)
-- **Attribution Window (7-30 days):** [Google Ads View-Through Conversions](https://support.google.com/google-ads/answer/3419241) (30-day default), Facebook Ads (7-day default)
-
-### Traffic Distribution
-- **Channel Mix (40% direct, 30% organic):** BrightEdge Organic Search Traffic Report, adjusted for B2C e-commerce patterns
-
-Parameters use midpoint values when industry sources provide ranges (e.g., 0.05-0.15% CTR → 0.10%).
-
-## Known Limitations
-
-1. **Analysis Scope**: Focuses on prospecting vs organic/direct attribution; does not analyze retargeting campaign attribution
-2. **Conservative Paid Penetration**: Only 17% of conversions include paid prospecting touchpoints (lower than typical 30-50% paid penetration in production)
-3. **Simplified Journey Paths**: Real customer journeys may include more touchpoint variety and cross-channel complexity
-4. **Single Device Assumption**: Does not model cross-device attribution (mobile to desktop conversions)
-5. **No Seasonality Effects**: Uniform traffic distribution rather than seasonal peaks/troughs
-6. **Controlled Parameters**: Conversion rates, user overlap, and budgets are fixed rather than dynamic
-
-## Why These Assumptions Matter
-
-These assumptions enable:
-- **Reproducibility**: Anyone can run the pipeline and get the same tables
-- **Clear Signal**: Controlled data shows where models disagree, without extra noise
-- **Realistic Patterns**: Campaign timing and user behavior sit in published industry ranges
-- **Shareable data**: No client GA4 extract, no NDA
-
-For production deployment, this framework would be adapted to:
-- Connect to actual GA4 and ad platform APIs (Google Analytics Data API, DV360 API)
-- Incorporate client-specific business rules and KPIs
-- Add cross-device identity resolution
-- Include all relevant marketing channels and touchpoints
-- Validate assumptions against observed historical patterns
+1. **Ads don't cause purchases here.** Purchase probability doesn't depend on
+   exposure. The models only show how each rule splits credit; they say nothing
+   about incrementality.
+2. **Last-touch can't credit paid media.** Every purchase happens in a session, and
+   impressions never land between a session's start and its checkout, so the last
+   touch is always a site visit. In real logs an impression can land mid-session
+   (say, in another tab), and that would give paid media some last-touch credit.
+3. **No paid-click sessions.** In GA4 a clicked ad shows up as a `cpc` session.
+   Here clicks never generate traffic, so paid media only ever appears as
+   view-through.
+4. **One device per user, no cross-device stitching**, and no consent loss beyond
+   the 60% reach.
+5. **No seasonality.** Traffic is flat across a window that includes Black Friday
+   and Cyber Monday.

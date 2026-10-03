@@ -1,0 +1,12 @@
+channel,channel_group,touchpoints,conversions_touched,first_touch_revenue,last_touch_revenue,linear_revenue,position_based_revenue,position_vs_last_touch,position_vs_last_touch_pct,last_touch_share,position_based_share
+direct,Site visit,174,142,6591.13,14745.36,9578.465,10177.3373,-4568.0227,-0.3098,0.3831,0.2644
+email,Site visit,25,25,862.02,2102.92,1248.6318,1374.4488,-728.4712,-0.3464,0.0546,0.0357
+google_organic,Site visit,128,107,5046.12,11080.55,6765.1456,7608.5416,-3472.0084,-0.3133,0.2879,0.1977
+prospecting_display,Paid media,115,89,5800.31,0.0,3506.614,3181.9041,3181.9041,,0.0,0.0827
+prospecting_native,Paid media,122,84,5580.64,0.0,3616.3109,3106.5517,3106.5517,,0.0,0.0807
+prospecting_video,Paid media,101,78,8694.37,0.0,3381.7049,4118.4834,4118.4834,,0.0,0.107
+referral,Site visit,52,52,862.0,4744.32,2401.1738,2697.0488,-2047.2712,-0.4315,0.1233,0.0701
+retargeting_display,Paid media,42,37,466.23,0.0,1083.5843,516.2927,516.2927,,0.0,0.0134
+retargeting_native,Paid media,37,32,61.79,0.0,972.8766,320.6657,320.6657,,0.0,0.0083
+retargeting_video,Paid media,46,31,0.0,0.0,1130.2293,355.8176,355.8176,,0.0,0.0092
+social_facebook,Site visit,70,64,4527.38,5818.84,4807.2537,5034.8983,-783.9417,-0.1347,0.1512,0.1308

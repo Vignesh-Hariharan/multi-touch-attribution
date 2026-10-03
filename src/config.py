@@ -1,93 +1,64 @@
 """
-Configuration management for Attribution Analytics project.
-All parameters loaded from environment variables - no hardcoding.
+Settings for data generation and the Snowflake load, read from .env.
+Snowflake credentials are only required by load_snowflake.py.
 """
 
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Optional
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class Config(BaseSettings):
-    """
-    Central configuration class using Pydantic for validation.
-    Loads all settings from .env file.
-    """
-
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=REPO_ROOT / ".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
+        extra="ignore",
     )
 
-    # Snowflake Connection
-    snowflake_account: str = Field(..., description="Snowflake account identifier")
-    snowflake_user: str = Field(..., description="Snowflake username")
-    snowflake_password: str = Field(..., description="Snowflake password")
-    snowflake_role: str = Field(default="SYSADMIN")
-    snowflake_warehouse: str = Field(default="COMPUTE_WH")
-    snowflake_database: str = Field(default="ATTRIBUTION_DEV")
+    snowflake_account: str | None = None
+    snowflake_user: str | None = None
+    snowflake_password: str | None = None
+    snowflake_role: str = "SYSADMIN"
+    snowflake_warehouse: str = "COMPUTE_WH"
+    snowflake_database: str = "ATTRIBUTION_DEV"
 
-    # Data Generation Parameters
-    num_events: int = Field(default=35000, description="Number of GA4 events to generate")
-    num_impressions: int = Field(default=27000, description="Number of ad impressions")
-    num_campaigns: int = Field(default=12, description="Number of campaigns")
-    user_overlap_pct: float = Field(
-        default=0.60, ge=0.0, le=1.0, description="Percentage of users with both events and impressions"
+    num_users: int = Field(default=6000, gt=0)
+    ad_reach_pct: float = Field(
+        default=0.60, ge=0.0, le=1.0, description="Share of site users the ad platform can reach"
     )
-    random_seed: int = Field(default=42, description="Random seed for reproducibility")
-    start_date: str = Field(default="2024-11-01", description="Start date for data generation")
-    end_date: str = Field(default="2024-12-15", description="End date for data generation")
+    random_seed: int = 42
+    start_date: str = "2024-11-01"
+    end_date: str = "2024-12-15"
 
-    # Optional GA4 Configuration
-    ga4_property_id: Optional[str] = Field(default=None)
-    google_application_credentials: Optional[str] = Field(default=None)
+    data_dir: Path = REPO_ROOT / "data"
 
-    # Derived Properties
-    @property
-    def data_dir(self) -> Path:
-        """Data directory path."""
-        path = Path(__file__).parent.parent / "data"
-        path.mkdir(exist_ok=True)
-        return path
+    @model_validator(mode="after")
+    def check_date_range(self) -> "Config":
+        if self.end_datetime < self.start_datetime:
+            raise ValueError(f"END_DATE {self.end_date} is before START_DATE {self.start_date}")
+        return self
 
     @property
     def start_datetime(self) -> datetime:
-        """Start date as datetime object."""
         return datetime.strptime(self.start_date, "%Y-%m-%d")
 
     @property
     def end_datetime(self) -> datetime:
-        """End date as datetime object."""
-        return datetime.strptime(self.end_date, "%Y-%m-%d")
+        """Last second of end_date; the flight includes the whole day."""
+        return datetime.strptime(self.end_date, "%Y-%m-%d").replace(hour=23, minute=59, second=59)
 
     @property
     def date_range_days(self) -> int:
-        """Number of days in date range."""
-        return (self.end_datetime - self.start_datetime).days
+        return (datetime.strptime(self.end_date, "%Y-%m-%d") - self.start_datetime).days + 1
 
-    # Publisher Configuration (realistic viewability rates)
     @property
-    def publishers(self) -> Dict[str, Dict[str, float]]:
-        """
-        Publisher configurations with viewability rates.
-        Based on industry standards (MRC guidelines).
-        """
-        return {
-            "premium_news": {"viewability": 0.75},
-            "premium_sports": {"viewability": 0.72},
-            "premium_business": {"viewability": 0.70},
-            "mid_tier_social": {"viewability": 0.62},
-            "mid_tier_content": {"viewability": 0.58},
-        }
-
-    # Channel Distribution (realistic traffic patterns)
-    @property
-    def channel_distribution(self) -> Dict[str, float]:
-        """Realistic channel distribution for web traffic."""
+    def channel_mix(self) -> dict[str, float]:
+        """Session traffic mix by channel."""
         return {
             "direct": 0.40,
             "organic_search": 0.30,
@@ -96,28 +67,32 @@ class Config(BaseSettings):
             "email": 0.05,
         }
 
-    # Campaign Type CTR (click-through rates by format)
     @property
-    def campaign_ctr(self) -> Dict[str, Dict[str, float]]:
-        """
-        Click-through rates by campaign type and format.
-        Based on programmatic advertising benchmarks.
-        """
+    def publisher_viewability(self) -> dict[str, float]:
         return {
-            "prospecting": {
-                "display": 0.0010,  # 0.10%
-                "video": 0.0140,  # 1.40%
-                "native": 0.0028,  # 0.28%
-            },
-            "retargeting": {
-                "display": 0.0020,  # 0.20% (2x prospecting)
-                "video": 0.0280,  # 2.80%
-                "native": 0.0056,  # 0.56%
-            },
+            "premium_news": 0.75,
+            "premium_sports": 0.72,
+            "premium_business": 0.70,
+            "mid_tier_social": 0.62,
+            "mid_tier_content": 0.58,
         }
 
-    def get_snowflake_connection_params(self) -> Dict[str, str]:
-        """Get Snowflake connection parameters as dict."""
+    @property
+    def ctr(self) -> dict[str, dict[str, float]]:
+        """Click-through rate on viewable impressions, by campaign type and format."""
+        return {
+            "prospecting": {"display": 0.0010, "video": 0.0140, "native": 0.0028},
+            "retargeting": {"display": 0.0020, "video": 0.0280, "native": 0.0056},
+        }
+
+    def snowflake_connection_params(self) -> dict[str, str]:
+        missing = [
+            name
+            for name in ("snowflake_account", "snowflake_user", "snowflake_password")
+            if not getattr(self, name)
+        ]
+        if missing:
+            raise ValueError(f"Missing Snowflake settings in .env: {', '.join(m.upper() for m in missing)}")
         return {
             "account": self.snowflake_account,
             "user": self.snowflake_user,
@@ -128,17 +103,10 @@ class Config(BaseSettings):
         }
 
 
-# Singleton instance
-_config: Optional[Config] = None
+_config: Config | None = None
 
 
 def get_config() -> Config:
-    """
-    Get or create config singleton.
-    
-    Returns:
-        Config instance loaded from environment
-    """
     global _config
     if _config is None:
         _config = Config()

@@ -1,0 +1,69 @@
+version: 2
+
+models:
+  - name: stg_events
+    description: Typed GA4 events with a channel derived from source / medium.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "NOT is_conversion OR (transaction_id IS NOT NULL AND revenue > 0)"
+    columns:
+      - name: event_timestamp
+        tests:
+          - not_null
+      - name: event_name
+        tests:
+          - accepted_values:
+              values: [session_start, page_view, scroll, add_to_cart, begin_checkout, purchase]
+      - name: user_pseudo_id
+        tests:
+          - not_null
+      - name: session_id
+        tests:
+          - not_null
+      - name: channel
+        tests:
+          - accepted_values:
+              values: [direct, google_organic, social_facebook, referral, email]
+      - name: transaction_id
+        tests:
+          - unique
+
+  - name: stg_impressions
+    description: Typed impressions, viewable and non-viewable.
+    columns:
+      - name: impression_id
+        tests:
+          - unique
+          - not_null
+      - name: impression_timestamp
+        tests:
+          - not_null
+      - name: user_pseudo_id
+        tests:
+          - not_null
+      - name: campaign_id
+        tests:
+          - relationships:
+              to: ref('stg_campaigns')
+              field: campaign_id
+      - name: is_viewable
+        tests:
+          - not_null
+
+  - name: stg_campaigns
+    description: Typed campaign metadata.
+    columns:
+      - name: campaign_id
+        tests:
+          - unique
+          - not_null
+      - name: campaign_type
+        tests:
+          - accepted_values:
+              values: [prospecting, retargeting]
+      - name: start_date
+        tests:
+          - not_null
+      - name: end_date
+        tests:
+          - not_null
