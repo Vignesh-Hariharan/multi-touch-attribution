@@ -209,8 +209,10 @@ Top paths: direct (24, 8.7%), social_facebook (16, 5.8%), google_organic (15, 5.
 ## 7. Publish to Tableau Public
 
 1. Extract before publishing.
-2. Keep the workbook and dashboard name `Multi-Touch Attribution Analysis`, so
-   publishing overwrites the existing viz and the README link keeps working.
+2. Save under the workbook name `Multi-Touch Attribution Analysis` so publishing
+   overwrites the existing viz. The view URL stays
+   `views/Multi-TouchAttributionAnalysis/Multi-TouchAttributionAnalysis` when the
+   dashboard tab is renamed, so the README link keeps working.
 3. Turn off "Show sheets as tabs".
 4. In the description, link this repo and repeat the caption.
 5. Export the dashboard image to `images/dashboard.jpg`; the README embeds it.

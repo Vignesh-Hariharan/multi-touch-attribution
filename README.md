@@ -23,7 +23,7 @@ feed a Tableau Public dashboard.
 
 ## What the run shows
 
-277 purchases, $38,491.99 revenue, seed 42. 162 of those purchases (58%) had at
+277 purchases, $38,491.99 revenue, seed 42. 162 of those purchases (58.5%) had at
 least one viewable paid impression in the 30 days before checkout. How much of the
 revenue paid media gets depends entirely on the model:
 
