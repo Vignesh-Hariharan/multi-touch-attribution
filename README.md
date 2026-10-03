@@ -13,6 +13,12 @@ paid media and site channels. Python generates GA4-style events and programmatic
 ad impressions, loads them into Snowflake, and dbt builds and tests the marts that
 feed a Tableau Public dashboard.
 
+<p align="center">
+  <a href="https://public.tableau.com/views/Multi-TouchAttributionAnalysis/Multi-TouchAttributionAnalysis?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link">
+    <img src="images/dashboard.jpg" alt="Multi-touch attribution dashboard" width="800"/>
+  </a>
+</p>
+
 [View the dashboard on Tableau Public](https://public.tableau.com/views/Multi-TouchAttributionAnalysis/Multi-TouchAttributionAnalysis?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
 
 ## What the run shows

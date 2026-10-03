@@ -213,4 +213,4 @@ Top paths: direct (24, 8.7%), social_facebook (16, 5.8%), google_organic (15, 5.
    publishing overwrites the existing viz and the README link keeps working.
 3. Turn off "Show sheets as tabs".
 4. In the description, link this repo and repeat the caption.
-5. Export a PNG to `images/dashboard.png` and embed it at the top of the README.
+5. Export the dashboard image to `images/dashboard.jpg`; the README embeds it.
